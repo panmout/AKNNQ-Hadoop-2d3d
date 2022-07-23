@@ -42,30 +42,42 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			String line = value.toString(); // read a line
 			String[] data = line.trim().split("\t");
 			
-			if (data.length == 3) // the line is a training point from mapper3_2 output, add to tpoints list
+			// if last element is true/false then
+			// the line is a query point with coords and 'true-false' flag from mapper3_1
+			// data array has these elements: pid, "true" (size = 2)
+			// or [pid, xq, yq] + "false" (size = 4) for 2d
+			// or [pid, xq, yq, zq] + "false" (size = 5) for 3d
+			if (data[data.length - 1].equals("true")) // if flag is 'true' just print point info
 			{
-				Point tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
-				this.tpoints.add(tpoint);
+				int outKey = Integer.parseInt(data[0]); // key is point_id
+				
+				String outValue = "true"; // outvalue is 'true'
+				
+				context.write(new IntWritable(outKey), new Text(outValue));
 			}
-			else // the line is a query point with coords and 'true-false' flag from mapper3_1
+			else if (data[data.length - 1].equals("false"))
 			{
-				// data array has these elements: pid,"true" (size = 2)
-				// or [pid, xi, yi] + "false" (size = 4)
-				if (data[data.length - 1].equals("true")) // if flag is 'true' just print point info
-				{
-					int outKey = Integer.parseInt(data[0]); // key is point_id
-					
-					String outValue = "true"; // outvalue is 'true'
-					
-					context.write(new IntWritable(outKey), new Text(outValue));
-				}
-				else if (data[data.length - 1].equals("false"))
-				{
-					// flag is 'false', import info to qpoints for processing
-					// filling with rest of data[] except last 'false'
-					Point qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
-					this.qpoints.add(qpoint);
-				}
+				// flag is 'false', import info to qpoints for processing
+				// filling with rest of data[] except last 'false'
+				Point qpoint = null;
+				
+				if (data.length == 4) // 2d case
+					qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
+				else // 3d case
+					qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
+				
+				this.qpoints.add(qpoint);
+			}
+			else // the line is a training point from mapper3_2 output, add to tpoints list
+			{
+				Point tpoint = null;
+				
+				if (data.length == 3) // 2d case
+					tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
+				else // 3d case
+					tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
+				
+				this.tpoints.add(tpoint);
 			}
 		}
 		
@@ -98,12 +110,17 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			// write output
 			// outKey = qpoint id
 			int outKey = qpoint.getId();
-			// outValue is {xq, yq, cell, neighbor list, false}
-			String outValue = String.format("%11.10f\t%11.10f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+			
+			// outValue is {xq, yq, zq, cell, neighbor list, false}
+			String outValue = "";
+			
+			if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
+				outValue = String.format("%11.10f\t%11.10f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+			else // 3d case
+				outValue = String.format("%11.10f\t%11.10f\t%11.10f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			
 			if (outValue != null)
 				context.write(new IntWritable(outKey), new Text(outValue));
-		
 		}
 	}
 	

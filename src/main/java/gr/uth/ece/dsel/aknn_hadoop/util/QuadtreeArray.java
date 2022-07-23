@@ -1,3 +1,4 @@
+/*
 package gr.uth.ece.dsel.aknn_hadoop.util;
 
 public final class QuadtreeArray
@@ -62,3 +63,4 @@ public final class QuadtreeArray
 		System.out.printf("Quadtree {capacity: %d, samplerate: %d} creation time: %d millis\n", capacity, samplerate, treetime);
 	}
 }
+*/

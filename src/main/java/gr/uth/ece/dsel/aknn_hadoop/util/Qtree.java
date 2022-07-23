@@ -1,6 +1,4 @@
 package gr.uth.ece.dsel.aknn_hadoop.util;
-/*
-package gr.uth.ece.dsel.spark.preliminary;
 
 public final class Qtree
 {
@@ -51,22 +49,22 @@ public final class Qtree
 		treeFileName = "qtree.ser";
 		treeFilePath = String.format("hdfs://%s:9000/user/%s/%s/%s", nameNode, username, treeDir, treeFileName);
 		
-		new CreateQTree(capacity, treeFilePath, treeFileName, trainingDatasetPath, samplerate);
+		CreateQTree qtree = new CreateQTree(capacity, treeFilePath, treeFileName, trainingDatasetPath, samplerate);
 		
 		String qtreeType = "";
 		
 		switch(type)
 		{
 			case 1:
-				CreateQTree.createQTree();
+				qtree.createQTree();
 				qtreeType = qtreeType.concat("maximum capacity method");
 				break;
 			case 2:
-				CreateQTree.createAllChldSplitQTree();
+				qtree.createAllChldSplitQTree();
 				qtreeType = qtreeType.concat("all children split method");
 				break;
 			case 3:
-				CreateQTree.createAvgWidthQTree();
+				qtree.createAvgWidthQTree();
 				qtreeType = qtreeType.concat("average width method");
 				break;
 		}
@@ -76,4 +74,3 @@ public final class Qtree
 		System.out.printf("Quadtree {%s, capacity: %d, samplerate: %d} creation time: %d millis\n", qtreeType, capacity, samplerate, treetime);
 	}
 }
-*/

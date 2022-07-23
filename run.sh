@@ -14,7 +14,6 @@ trainingDir=input
 queryDir=input
 queryDataset=query-dataset.txt
 trainingDataset=NApppointNNew.txt
-mbrCentroidFile=mbrcentroid.txt
 mr1outputPath=mapreduce1
 mr2outputPath=mapreduce2
 mr3outputPath=mapreduce3

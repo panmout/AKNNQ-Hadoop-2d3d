@@ -23,7 +23,7 @@ public class Mapper1 extends Mapper<LongWritable, Text, Text, IntWritable>
 	private String treeFileName; // tree file name in HDFS
 	private String treeFile; // full HDFS path to tree file
 	private Node root; // create root node
-	private int N; // N*N cells
+	private int N; // (2d) N*N or (3d) N*N*N cells
 	
 	@Override
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException

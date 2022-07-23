@@ -1,3 +1,4 @@
+/*
 package gr.uth.ece.dsel.aknn_hadoop.util;
 
 import java.io.BufferedReader;
@@ -265,3 +266,4 @@ public class CreateQTreeArray
 		writeFiles(root);
 	}
 }
+*/

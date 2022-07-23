@@ -31,7 +31,7 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 	private String treeFileName; // tree file name in HDFS
 	private String treeFile; // full HDFS path to tree file
 	private Node root; // create root node
-	private int N; // N*N cells
+	private int N; // (2d) N*N or (3d) N*N*N cells
 	private int K;
 	private HashSet<String> overlaps;
 	private GetOverlaps ovl;
@@ -43,19 +43,43 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		String line = value.toString();
 		String[] data = line.trim().split("\t");
 		
-		// read input data: point id, x, y, cell id
-		final Point qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
-		final String qcell = data[3];
+		// read input data: point id, x, y, z, cell id, neighbor list
+		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 3, 5, 7,...
+		Point qpoint = null;
+		String qcell = null;
 		
 		this.neighbors.clear();
 		
-		if (data.length > 4) // creating neighbors from [tpoint_id, dist] from knn list
-			for (int j = 4; j < data.length; j += 2)
+		if (data.length % 2 == 0) // 2d case
+		{
+			qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
+			qcell = data[3];
+			
+			if (data.length > 4) // creating neighbors from [tpoint_id, dist] from knn list
 			{
-				// 1st pair element is point id, 2nd pair element is distance
-				IdDist neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-				this.neighbors.offer(neighbor);
+				for (int j = 4; j < data.length; j += 2)
+				{
+					// 1st pair element is point id, 2nd pair element is distance
+					IdDist neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
+					this.neighbors.offer(neighbor);
+				}
 			}
+		}
+		else // 3d case
+		{
+			qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
+			qcell = data[4];
+			
+			if (data.length > 5) // creating neighbors from [tpoint_id, dist] from knn list
+			{
+				for (int j = 5; j < data.length; j += 2)
+				{
+					// 1st pair element is point id, 2nd pair element is distance
+					IdDist neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
+					this.neighbors.offer(neighbor);
+				}
+			}
+		}
 		
 		// get overlapped cells
 		this.ovl.initializeFields(qpoint, qcell, this.neighbors);
@@ -64,15 +88,24 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		
 		// write output:
 		// no overlaps: {query cell, qpoint id, true}
-		// overlaps: for each overlapped cell: {cell, qpoint id, x, y, false}
+		// overlaps: for each overlapped cell: {cell, qpoint id, x, y, z, false}
+		
 		if (this.overlaps.size() == 1 && this.overlaps.contains(qcell))	// only cell in overlaps is query cell, so there are no overlaps
 			context.write(new Text(qcell), new Text(String.format("%d\ttrue", qpoint.getId())));
 		else // there are overlaps
+		{
 			for (String cell: this.overlaps)
 			{
-				String outValue = String.format("%d\t%11.10f\t%11.10f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY());
+				String outValue = "";
+				
+				if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
+					outValue = String.format("%d\t%11.10f\t%11.10f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY());
+				else // 3d case
+					outValue = String.format("%d\t%11.10f\t%11.10f\t%11.10f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY(), qpoint.getZ());
+				
 				context.write(new Text(cell), new Text(outValue));
 			}
+		}
 	}
 	
 	// reading hdfs file contents into hashmap

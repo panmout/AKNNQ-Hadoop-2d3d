@@ -56,7 +56,7 @@ public class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 		}
 		else // no "true" found, read first K neighbors
 		{	
-			for (int i = 0; i < K; i++) // reading neighbors list
+			for (int i = 0; i < this.K; i++) // reading neighbors list
 			{
 				IdDist neighbor = neighbors.poll(); // neighbor array
 				
@@ -71,6 +71,6 @@ public class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 	protected void setup(Context context) throws IOException
 	{
 		Configuration conf = context.getConfiguration();
-		K = Integer.parseInt(conf.get("K"));
+		this.K = Integer.parseInt(conf.get("K"));
 	}
 }

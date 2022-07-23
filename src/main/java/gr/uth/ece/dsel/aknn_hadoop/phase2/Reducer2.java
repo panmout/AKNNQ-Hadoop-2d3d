@@ -40,7 +40,17 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 		for (Text value: values) // run through value of mappers output
 		{
 			String line = value.toString(); // read a line
-			Point p = AknnFunctions.stringToPoint(line, "\t"); // convert to point
+			String[] data = line.trim().split("\t");
+			
+			Point p = null;
+			
+			if (data.length == 4) // 2d case (id, x, y, Q/T)
+				p = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
+			else if (data.length == 5) // 3d case (x, y, z, Q/T)
+				p = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
+			else
+				throw new IllegalArgumentException();
+			
 			char type = line.trim().charAt(line.length() - 1); // get last "Q" or "T"
 			
 			switch(type)
@@ -80,8 +90,13 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			// write output
 			// outKey = qpoint id
 			int outKey = qpoint.getId();
-			// outValue is {xq, yq, cell id, neighbor list}
-			String outValue = String.format("%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+			// outValue is {xq, yq, zq, cell id, neighbor list}
+			String outValue = "";
+			
+			if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
+				outValue = String.format("%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+			else // 3d case
+				outValue = String.format("%11.10f\t%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), qpoint.getZ(), AknnFunctions.pqToString(this.neighbors, this.K));
 			
 			context.write(new IntWritable(outKey), new Text(outValue));
 		}

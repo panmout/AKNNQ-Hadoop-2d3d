@@ -9,12 +9,21 @@ public class Point implements Serializable
 	private int id;
 	private double x;
 	private double y;
+	private double z = Double.NEGATIVE_INFINITY;
 	
 	public Point(int id, double x, double y)
 	{
 		this.id = id;
 		this.x = x;
 		this.y = y;
+	}
+	
+	public Point(int id, double x, double y, double z) // create 3d points
+	{
+		this.id = id;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 	
 	public final int getId()
@@ -30,5 +39,10 @@ public class Point implements Serializable
 	public final double getY()
 	{
 		return this.y;
+	}
+	
+	public final double getZ()
+	{
+		return this.z;
 	}
 }

@@ -1,6 +1,4 @@
 package gr.uth.ece.dsel.aknn_hadoop.util;
-/*
-package gr.uth.ece.dsel.spark.util;
 
 import java.io.IOException;
 import java.io.BufferedReader;
@@ -19,18 +17,19 @@ import org.apache.hadoop.fs.Path;
 
 public final class CreateQTree
 {
-	private static Formatter outputTextFile; // local output text file
-	private static FileOutputStream fileout;
-	private static ObjectOutputStream outputObjectFile; // local output object file
-	private static int capacity;
-	private static HashMap<Integer, Double[]> sample_dataset;
-	private static int numCells = 0;
-	private static String x = "";
-	private static String treeFilePath;
-	private static String treeFileName;
-	private static String trainingDatasetPath;
-	private static int samplerate;
-	private static HashSet<Double> widths = new HashSet<Double>(); // store cell widths
+	private Formatter outputTextFile; // local output text file
+	private FileOutputStream fileout;
+	private ObjectOutputStream outputObjectFile; // local output object file
+	private int capacity;
+	private HashMap<Integer, Double[]> sample_dataset;
+	private int numCells = 0;
+	private String x = "";
+	private String treeFilePath;
+	private String treeFileName;
+	private String trainingDatasetPath;
+	private int samplerate;
+	private HashSet<Double> widths = new HashSet<Double>(); // store cell widths
+	private boolean is3d = false; // 2d or 3d quad tree (set in readSample() method)
 	
 	public CreateQTree(int newCapacity, String newTreeFilePath, String newTreeFileName, String newTrainingDatasetPath, int newSamplerate)
 	{
@@ -42,22 +41,37 @@ public final class CreateQTree
 	}
 	
 	// create root node (maximum capacity method)
-	private static final Node createQT(Node node)
+	private final Node createQT(Node node)
 	{
 		if (node.getContPoints().size() > capacity)
 		{
 			node = createChildren(node);
 			
-			node.setNW(createQT(node.getNW()));
-			node.setNE(createQT(node.getNE()));
-			node.setSW(createQT(node.getSW()));
-			node.setSE(createQT(node.getSE()));
+			if (!this.is3d) // 2d case
+			{
+				node.setNW(createQT(node.getNW()));
+				node.setNE(createQT(node.getNE()));
+				node.setSW(createQT(node.getSW()));
+				node.setSE(createQT(node.getSE()));
+			}
+			else if (this.is3d) // 3d case
+			{
+				node.setCNW(createQT(node.getCNW()));
+				node.setCNE(createQT(node.getCNE()));
+				node.setCSW(createQT(node.getCSW()));
+				node.setCSE(createQT(node.getCSE()));
+				
+				node.setFNW(createQT(node.getFNW()));
+				node.setFNE(createQT(node.getFNE()));
+				node.setFSW(createQT(node.getFSW()));
+				node.setFSE(createQT(node.getFSE()));
+			}
 		}
 		return node;
 	}
 	
 	// create root node (all children split method)
-	private static final Node createQT(Node node, boolean force)
+	private final Node createQT(Node node, boolean force)
 	{
 		if (node.getContPoints().size() > capacity || (force == true))
 		{
@@ -67,103 +81,236 @@ public final class CreateQTree
 			
 			if (nodeNumPoints <= capacity)
 			{
-				node.setNW(createQT(node.getNW(), false));
-				node.setNE(createQT(node.getNE(), false));
-				node.setSW(createQT(node.getSW(), false));
-				node.setSE(createQT(node.getSE(), false));
+				if (!this.is3d) // 2d case
+				{
+					node.setNW(createQT(node.getNW(), false));
+					node.setNE(createQT(node.getNE(), false));
+					node.setSW(createQT(node.getSW(), false));
+					node.setSE(createQT(node.getSE(), false));
+				}
+				else if (this.is3d) // 3d case
+				{
+					node.setCNW(createQT(node.getCNW(), false));
+					node.setCNE(createQT(node.getCNE(), false));
+					node.setCSW(createQT(node.getCSW(), false));
+					node.setCSE(createQT(node.getCSE(), false));
+					
+					node.setFNW(createQT(node.getFNW(), false));
+					node.setFNE(createQT(node.getFNE(), false));
+					node.setFSW(createQT(node.getFSW(), false));
+					node.setFSE(createQT(node.getFSE(), false));
+				}
 			}
 			else
 			{
 				force = false;
 				
-				if (node.getNW().getContPoints().size() > capacity)
+				if (!this.is3d) // 2d case
 				{
-					force = true;
+					if (node.getNW().getContPoints().size() > capacity)
+						force = true;
+					if (node.getNE().getContPoints().size() > capacity)
+						force = true;
+					if (node.getSW().getContPoints().size() > capacity)
+						force = true;
+					if (node.getSE().getContPoints().size() > capacity)
+						force = true;
+					
+					node.setNW(createQT(node.getNW(), force));
+					node.setNE(createQT(node.getNE(), force));
+					node.setSW(createQT(node.getSW(), force));
+					node.setSE(createQT(node.getSE(), force));
 				}
-				if (node.getNE().getContPoints().size() > capacity)
+				else if (this.is3d) // 3d case
 				{
-					force = true;
+					if (node.getCNW().getContPoints().size() > capacity)
+						force = true;
+					if (node.getCNE().getContPoints().size() > capacity)
+						force = true;
+					if (node.getCSW().getContPoints().size() > capacity)
+						force = true;
+					if (node.getCSE().getContPoints().size() > capacity)
+						force = true;
+					
+					if (node.getFNW().getContPoints().size() > capacity)
+						force = true;
+					if (node.getFNE().getContPoints().size() > capacity)
+						force = true;
+					if (node.getFSW().getContPoints().size() > capacity)
+						force = true;
+					if (node.getFSE().getContPoints().size() > capacity)
+						force = true;
+					
+					node.setCNW(createQT(node.getCNW(), force));
+					node.setCNE(createQT(node.getCNE(), force));
+					node.setCSW(createQT(node.getCSW(), force));
+					node.setCSE(createQT(node.getCSE(), force));
+					
+					node.setFNW(createQT(node.getFNW(), force));
+					node.setFNE(createQT(node.getFNE(), force));
+					node.setFSW(createQT(node.getFSW(), force));
+					node.setFSE(createQT(node.getFSE(), force));
 				}
-				if (node.getSW().getContPoints().size() > capacity)
-				{
-					force = true;
-				}
-				if (node.getSE().getContPoints().size() > capacity)
-				{
-					force = true;
-				}
-				node.setNW(createQT(node.getNW(), force));
-				node.setNE(createQT(node.getNE(), force));
-				node.setSW(createQT(node.getSW(), force));
-				node.setSE(createQT(node.getSE(), force));
 			}
 		}
 		return node;
 	}
 	
 	// create root node (average width split method)
-	private static final Node createQT(Node node, double avgWidth)
+	private final Node createQT(Node node, double avgWidth)
 	{
 		if ((node.getContPoints().size() > capacity) || (node.getXmax() - node.getXmin() > avgWidth)) // divide node only if it has many points or is bigger than average size
 		{
 			node = createChildren(node);
 			
-			node.setNW(createQT(node.getNW(), avgWidth));
-			node.setNE(createQT(node.getNE(), avgWidth));
-			node.setSW(createQT(node.getSW(), avgWidth));
-			node.setSE(createQT(node.getSE(), avgWidth));
+			if (!this.is3d) // 2d case
+			{
+				node.setNW(createQT(node.getNW(), avgWidth));
+				node.setNE(createQT(node.getNE(), avgWidth));
+				node.setSW(createQT(node.getSW(), avgWidth));
+				node.setSE(createQT(node.getSE(), avgWidth));
+			}
+			else if (this.is3d) // 3d case
+			{
+				node.setCNW(createQT(node.getCNW(), avgWidth));
+				node.setCNE(createQT(node.getCNE(), avgWidth));
+				node.setCSW(createQT(node.getCSW(), avgWidth));
+				node.setCSE(createQT(node.getCSE(), avgWidth));
+				
+				node.setFNW(createQT(node.getFNW(), avgWidth));
+				node.setFNE(createQT(node.getFNE(), avgWidth));
+				node.setFSW(createQT(node.getFSW(), avgWidth));
+				node.setFSE(createQT(node.getFSE(), avgWidth));
+			}
 		}
 		return node;
 	}
 	
 	// create children and split sample training points
-	private static final Node createChildren(Node node)
+	private final Node createChildren(Node node)
 	{
-		// create child nodes
-		node.setNW(new Node(node.getXmin(), (node.getYmin() + node.getYmax()) / 2, (node.getXmin() + node.getXmax()) / 2, node.getYmax()));
-		node.setNE(new Node((node.getXmin() + node.getXmax()) / 2, (node.getYmin() + node.getYmax()) / 2, node.getXmax(), node.getYmax()));
-		node.setSW(new Node(node.getXmin(), node.getYmin(), (node.getXmin() + node.getXmax()) / 2, (node.getYmin() + node.getYmax()) / 2));
-		node.setSE(new Node((node.getXmin() + node.getXmax()) / 2, node.getYmin(), node.getXmax(), (node.getYmin() + node.getYmax()) / 2));
+		// define x, y
+		double xmin = node.getXmin();
+		double xmax = node.getXmax();
+		double xmid = (xmin + xmax) / 2;
 		
-		// partition dataset to child nodes
-		Iterator<Integer> iterator = node.getContPoints().iterator(); // create iterator
-		while (iterator.hasNext()) // while set has elements
+		double ymin = node.getYmin();
+		double ymax = node.getYmax();
+		double ymid = (ymin + ymax) / 2;
+		
+		if (!this.is3d) // 2d case
 		{
-			int pid = iterator.next();
-			Double[] coords = sample_dataset.get(pid);
-			double x = coords[0];
-			double y = coords[1];
-			if (x >= node.getXmin() && x < (node.getXmin() + node.getXmax()) / 2) // point inside SW or NW
+			// create child nodes
+			node.setNW(new Node(xmin, ymid, xmid, ymax));
+			node.setNE(new Node(xmid, ymid, xmax, ymax));
+			node.setSW(new Node(xmin, ymin, xmid, ymid));
+			node.setSE(new Node(xmid, ymin, xmax, ymid));
+			
+			// partition dataset to child nodes
+			Iterator<Integer> iterator = node.getContPoints().iterator(); // create iterator
+			while (iterator.hasNext()) // while set has elements
 			{
-				if (y >= node.getYmin() && y < (node.getYmin() + node.getYmax()) / 2) // point inside SW
+				int pid = iterator.next();
+				Double[] coords = sample_dataset.get(pid);
+				double x = coords[0];
+				double y = coords[1];
+				if (x >= xmin && x < xmid) // point inside SW or NW
 				{
-					node.getSW().addPoints(pid);
+					if (y >= ymin && y < ymid) // point inside SW
+						node.getSW().addPoints(pid);
+					else if (y >= ymid && y < ymax) // point inside NW
+						node.getNW().addPoints(pid);
 				}
-				else if (y >= (node.getYmin() + node.getYmax()) / 2 && y < node.getYmax()) // point inside NW
+				else if (x >= xmid && x < xmax) // point inside SE or NE
 				{
-					node.getNW().addPoints(pid);
+					if (y >= ymin && y < ymid) // point inside SE
+						node.getSE().addPoints(pid);
+					else if (y >= ymid && y < ymax) // point inside NE
+						node.getNE().addPoints(pid);
 				}
+				iterator.remove();
+				node.removePoint(pid); // remove point from parent node
 			}
-			else if (x >= (node.getXmin() + node.getXmax()) / 2 && x < node.getXmax()) // point inside SE or NE
+		}
+		else if (is3d) // 3d case
+		{
+			// define z
+			double zmin = node.getZmin();
+			double zmax = node.getZmax();
+			double zmid = (zmin + zmax) / 2;
+			
+			// create child nodes
+			// CNW (xmin, ymid, zmid, xmid, ymax, zmax)
+			node.setCNW(new Node(xmin, ymid, zmid, xmid, ymax, zmax));
+			// CNE (xmid, ymid, zmid, xmax, ymax, zmax)
+			node.setCNE(new Node(xmid, ymid, zmid, xmax, ymax, zmax));
+			// CSW (xmin, ymin, zmid, xmid, ymid, zmax)
+			node.setCSW(new Node(xmin, ymin, zmid, xmid, ymid, zmax));
+			// CSE (xmid, ymin, zmid, xmax, ymid, zmax)
+			node.setCSE(new Node(xmid, ymin, zmid, xmax, ymid, zmax));
+			// FNW (xmin, ymid, zmin, xmid, ymax, zmid)
+			node.setFNW(new Node(xmin, ymid, zmin, xmid, ymax, zmid));
+			// FNE (xmid, ymid, zmin, xmax, ymax, zmid)
+			node.setFNE(new Node(xmid, ymid, zmin, xmax, ymax, zmid));
+			// FSW (xmin, ymin, zmin, xmid, ymid, zmid)
+			node.setFSW(new Node(xmin, ymin, zmin, xmid, ymid, zmid));
+			// FSE (xmid, ymin, zmin, xmax, ymid, zmid)
+			node.setFSE(new Node(xmid, ymin, zmin, xmax, ymid, zmid));
+			
+			// partition dataset to child nodes
+			Iterator<Integer> iterator = node.getContPoints().iterator(); // create iterator
+			while (iterator.hasNext()) // while set has elements
 			{
-				if (y >= node.getYmin() && y < (node.getYmin() + node.getYmax()) / 2) // point inside SE
+				int pid = iterator.next();
+				Double[] coords = sample_dataset.get(pid);
+				double x = coords[0];
+				double y = coords[1];
+				double z = coords[2];
+				
+				if (x >= xmin && x < xmid) // point inside SW or NW (Floor or Ceiling)
 				{
-					node.getSE().addPoints(pid);
+					if (y >= ymin && y < ymid) // point inside SW (Floor or Ceiling)
+					{
+						if (z >= zmin && z < zmid) // point inside FSW
+							node.getFSW().addPoints(pid);
+						else if (z >= zmid && z < zmax) // point inside CSW
+							node.getCSW().addPoints(pid);
+					}
+					else if (y >= ymid && y < ymax) // point inside NW (Floor or Ceiling)
+					{
+						if (z >= zmin && z < zmid) // point inside FNW
+							node.getFNW().addPoints(pid);
+						else if (z >= zmid && z < zmax) // point inside CNW
+							node.getCNW().addPoints(pid);
+					}
 				}
-				else if (y >= (node.getYmin() + node.getYmax()) / 2 && y < node.getYmax()) // point inside NE
+				else if (x >= xmid && x < xmax) // point inside SE or NE (Floor or Ceiling)
 				{
-					node.getNE().addPoints(pid);
+					if (y >= ymin && y < ymid) // point inside SE (Floor or Ceiling)
+					{
+						if (z >= zmin && z < zmid) // point inside FSE
+							node.getFSE().addPoints(pid);
+						else if (z >= zmid && z < zmax) // point inside CSE
+							node.getCSE().addPoints(pid);
+					}
+					else if (y >= ymid && y < ymax) // point inside NE (Floor or Ceiling)
+					{
+						if (z >= zmin && z < zmid) // point inside FNE
+							node.getFNE().addPoints(pid);
+						else if (z >= zmid && z < zmax) // point inside CNE
+							node.getCNE().addPoints(pid);
+					}
 				}
+				iterator.remove();
+				node.removePoint(pid); // remove point from parent node
 			}
-			iterator.remove();
-			node.removePoint(pid); // remove point from parent node
 		}
 		return node;
 	}
 	
-	private static final void df_repr(Node node) // create qtree in string form
+	private final void df_repr(Node node) // create qtree in string form
 	{
-		if (node.getNW() == null)
+		if (node.getNW() == null && node.getCNW() == null)
 		{
 			x = x.concat("0");
 			numCells++;
@@ -171,30 +318,59 @@ public final class CreateQTree
 		else
 		{
 			x = x.concat("1");
-			df_repr(node.getNW());
-			df_repr(node.getNE());
-			df_repr(node.getSW());
-			df_repr(node.getSE());
+			
+			if (!this.is3d) // 2d case
+			{
+				df_repr(node.getNW());
+				df_repr(node.getNE());
+				df_repr(node.getSW());
+				df_repr(node.getSE());
+			}
+			else if (this.is3d) // 3d case
+			{
+				df_repr(node.getFNW());
+				df_repr(node.getFNE());
+				df_repr(node.getFSW());
+				df_repr(node.getFSE());
+				
+				df_repr(node.getCNW());
+				df_repr(node.getCNE());
+				df_repr(node.getCSW());
+				df_repr(node.getCSE());
+			}
 		}
 	}
 	
 	// get leaves widths
-	private static final void getWidths(Node node)
+	private final void getWidths(Node node)
 	{		
-		if (node.getNW() == null)
-		{
+		if (node.getNW() == null && node.getCNW() == null)
 			widths.add(node.getXmax() - node.getXmin());
-		}
 		else
 		{
-			getWidths(node.getNW());
-			getWidths(node.getNE());
-			getWidths(node.getSW());
-			getWidths(node.getSE());
+			if (!this.is3d) // 2d case
+			{
+				getWidths(node.getNW());
+				getWidths(node.getNE());
+				getWidths(node.getSW());
+				getWidths(node.getSE());
+			}
+			else if (this.is3d) // 3d case
+			{
+				getWidths(node.getFNW());
+				getWidths(node.getFNE());
+				getWidths(node.getFSW());
+				getWidths(node.getFSE());
+				
+				getWidths(node.getCNW());
+				getWidths(node.getCNE());
+				getWidths(node.getCSW());
+				getWidths(node.getCSE());
+			}
 		}
 	}
 	
-	private static final void readSample()
+	private final void readSample()
 	{
 		try // open files
 		{
@@ -225,8 +401,18 @@ public final class CreateQTree
 					int pid = Integer.parseInt(data[0]); // tpoint id
 					double x = Double.parseDouble(data[1]); // get x
 					double y = Double.parseDouble(data[2]); // get y
-					Double[] tpoint = {x, y};
-					sample_dataset.put(pid, tpoint); // add {pid, x, y} to hashmap
+					
+					Double[] tpoint = null;
+					
+					if (data.length == 3) // 2d dataset
+						tpoint = new Double[]{x, y};
+					else if (data.length == 4) // 3d dataset
+					{
+						double z = Double.parseDouble(data[3]); // get z
+						tpoint = new Double[]{x, y, z};
+						this.is3d = true;
+					}
+					sample_dataset.put(pid, tpoint); // add {pid, x, y, z} to hashmap
 				}
 			}
 		}
@@ -237,7 +423,7 @@ public final class CreateQTree
 		}
 	}
 	
-	private static final void writeFiles(Node node)
+	private final void writeFiles(Node node)
 	{		
 		// write to files
 		try
@@ -271,17 +457,20 @@ public final class CreateQTree
 	}
 	
 	// create quadtree (capacity based only)
-	public static final void createQTree()
+	public final void createQTree()
 	{
 		readSample();
 		
-		// create quad tree from sample dataset
-		Node root = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		Node root = null;
+		
+		// create 2d or 3d quad tree from sample dataset
+		if (!this.is3d) // 2d
+			root = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		else if (this.is3d) // 3d
+			root = new Node(0.0, 0.0, 0.0, 1.0, 1.0, 1.0); // create root node
 		
 		for (int i : sample_dataset.keySet()) // add all sample points to root node
-		{
 			root.addPoints(i);
-		}
 		
 		root = createQT(root); // create tree from root
 		
@@ -295,17 +484,20 @@ public final class CreateQTree
 	}
 	
 	// create quadtree (all children split method = if one child splits, all will)
-	public static final void createAllChldSplitQTree()
+	public final void createAllChldSplitQTree()
 	{
 		readSample();
 		
-		// create quad tree from sample dataset
-		Node root = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		Node root = null;
+		
+		// create 2d or 3d quad tree from sample dataset
+		if (!this.is3d) // 2d
+			root = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		else if (this.is3d) // 3d
+			root = new Node(0.0, 0.0, 0.0, 1.0, 1.0, 1.0); // create root node
 		
 		for (int i : sample_dataset.keySet()) // add all sample points to root node
-		{
 			root.addPoints(i);
-		}
 		
 		root = createQT(root, false); // create tree from root
 		
@@ -319,17 +511,20 @@ public final class CreateQTree
 	}
 	
 	// create quadtree (capacity based only)
-	public static final void createAvgWidthQTree()
+	public final void createAvgWidthQTree()
 	{
 		readSample();
 		
-		// create quad tree from sample dataset
-		Node root1 = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		Node root1 = null;
+		
+		// create 2d or 3d quad tree from sample dataset
+		if (!this.is3d) // 2d
+			root1 = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		else if (this.is3d) // 3d
+			root1 = new Node(0.0, 0.0, 0.0, 1.0, 1.0, 1.0); // create root node
 		
 		for (int i : sample_dataset.keySet()) // add all sample points to root node
-		{
 			root1.addPoints(i);
-		}
 		
 		// create initial tree from root, 'POSITIVE_INFINITY' is used to make the right OR statement 'false'
 		root1 = createQT(root1, Double.POSITIVE_INFINITY);
@@ -339,20 +534,22 @@ public final class CreateQTree
 		double averageWidth = 0;
 		
 		for (double i : widths)
-		{
 			averageWidth += i;
-		}
 		
 		averageWidth = averageWidth / widths.size();
 		
 		System.out.printf("average width: %11.10f\n", averageWidth);
 		
-		Node root2 = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		Node root2 = null;
+		
+		// create 2d or 3d quad tree from sample dataset
+		if (!this.is3d) // 2d
+			root2 = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+		else if (this.is3d) // 3d
+			root2 = new Node(0.0, 0.0, 0.0, 1.0, 1.0, 1.0); // create root node
 		
 		for (int i : sample_dataset.keySet()) // add all sample points to root node
-		{
 			root2.addPoints(i);
-		}
 		
 		root2 = createQT(root2, averageWidth); // create final tree from root and average width
 		
@@ -365,4 +562,3 @@ public final class CreateQTree
 		writeFiles(root2);
 	}
 }
-*/

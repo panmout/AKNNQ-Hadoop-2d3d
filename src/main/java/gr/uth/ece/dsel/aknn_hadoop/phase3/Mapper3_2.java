@@ -22,7 +22,7 @@ public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 	private String treeFileName; // tree file name in HDFS
 	private String treeFile; // full HDFS path to tree file
 	private Node root; // create root node
-	private int N; // N*N cells
+	private int N; // (2d) N*N or (3d) N*N*N cells
 	
 	@Override
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
@@ -38,7 +38,13 @@ public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 		else if (partitioning.equals("gd")) // grid cell
 			cell = AknnFunctions.pointToCellGD(p, N);
 		
-		String outValue = String.format("%d\t%11.10f\t%11.10f", p.getId(), p.getX(), p.getY());
+		String outValue = "";
+		
+		if (p.getZ() == Double.NEGATIVE_INFINITY) // 2d case
+			outValue = String.format("%d\t%11.10f\t%11.10f", p.getId(), p.getX(), p.getY());
+		else
+			outValue = String.format("%d\t%11.10f\t%11.10f\t%11.10f", p.getId(), p.getX(), p.getY(), p.getZ());
+		
 		context.write(new Text(cell), new Text(outValue));
 	}
 	
