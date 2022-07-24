@@ -1,0 +1,24 @@
+AKNN GD-PS starts
+Phase 1 time: 51409 millis
+Phase 2 time: 91045 millis
+Phase 3 time: 50455 millis
+Phase 4 time: 51668 millis
+GD-PS,  time: 244577 millis
+AKNN GD-PS starts
+Phase 1 time: 40349 millis
+Phase 2 time: 85874 millis
+Phase 3 time: 50431 millis
+Phase 4 time: 50575 millis
+GD-PS,  time: 227229 millis
+AKNN GD-PS starts
+Phase 1 time: 41370 millis
+Phase 2 time: 90956 millis
+Phase 3 time: 44432 millis
+Phase 4 time: 47414 millis
+GD-PS,  time: 224172 millis
+AKNN GD-PS starts
+Phase 1 time: 44697 millis
+Phase 2 time: 51543 millis
+Phase 3 time: 61174 millis
+Phase 4 time: 61983 millis
+GD-PS,  time: 219397 millis

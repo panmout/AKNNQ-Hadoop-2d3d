@@ -96,7 +96,7 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
 				outValue = String.format("%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			else // 3d case
-				outValue = String.format("%11.10f\t%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), qpoint.getZ(), AknnFunctions.pqToString(this.neighbors, this.K));
+				outValue = String.format("%11.10f\t%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			
 			context.write(new IntWritable(outKey), new Text(outValue));
 		}

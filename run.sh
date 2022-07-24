@@ -7,13 +7,13 @@ mode=ps             # bf or ps
 K=10
 reducers=2
 nameNode=panagiotis-lubuntu
-N=100
+N=10
 treeFile=qtree.ser
 treeDir=sampletree
 trainingDir=input
 queryDir=input
-queryDataset=query-dataset.txt
-trainingDataset=NApppointNNew.txt
+queryDataset=query-dataset3d.txt
+trainingDataset=NApppointNNew3d.txt
 mr1outputPath=mapreduce1
 mr2outputPath=mapreduce2
 mr3outputPath=mapreduce3
@@ -23,7 +23,7 @@ mr4outputPath=mapreduce4
 #                                    EXECUTE                              #
 ###########################################################################
 
-hadoop jar ./target/aknn-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.main.Aknn \
+hadoop jar ./target/aknn-hadoop-2d3d-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.main.Aknn \
 partitioning=$partitioning \
 mode=$mode \
 K=$K \
