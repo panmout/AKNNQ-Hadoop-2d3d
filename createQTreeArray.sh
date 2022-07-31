@@ -12,7 +12,7 @@ capacity=10
 ###########################################################################
 #                                    EXECUTE                              # ###########################################################################
 
-hadoop jar ./target/aknn-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.util.QuadtreeArray \
+hadoop jar ./target/aknn-hadoop-2d3d-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.util.QuadtreeArray \
 nameNode=$nameNode \
 trainingDir=$trainingDir \
 treeDir=$treeDir \

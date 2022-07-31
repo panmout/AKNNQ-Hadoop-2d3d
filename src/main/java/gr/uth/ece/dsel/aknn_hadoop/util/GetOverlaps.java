@@ -177,9 +177,9 @@ public final class GetOverlaps
     	// find query point cell
     	final double ds = 1.0 / this.N; // interval ds (cell width)
     	final int intQCell = Integer.parseInt(qcell); // get int value of query point cell
-    	final int iq = intQCell % this.N; // get i
+    	final int iq = intQCell % this.N; // get i (2d/3d)
     	final int jq = !this.is3d ? (intQCell - iq) / this.N : ((intQCell - iq) / this.N) % this.N; // get j (2d/3d)
-    	final int kq = !this.is3d ? 0 : ((intQCell - iq) / this.N - jq) / this.N; // get k (0 for 2d)
+    	final int kq = !this.is3d ? Integer.MIN_VALUE : ((intQCell - iq) / this.N - jq) / this.N; // get k (3d only)
     	//final int iq = (int) (xq / ds); // get i
     	//final int jq = (int) (yq / ds); // get j
     	//final int intQCell = jq * this.N + iq; // calculate int cell_id
@@ -188,12 +188,9 @@ public final class GetOverlaps
     	// else half the cell width
 		double R = !this.neighbors.isEmpty() ? this.neighbors.peek().getDist() : 0.5 * ds;
 		
-		final double x = xq % ds; // relative x from cell SW corner
-		final double y = yq % ds; // relative y from cell SW corner
-		// 3d case
-		double z = Double.NEGATIVE_INFINITY; // relative z from cell floor SW corner
-		if (this.is3d)
-			z = zq % ds;
+		final double x = xq % ds; // relative x from cell (floor in 3d) SW corner
+		final double y = yq % ds; // relative y from cell (floor in 3d) SW corner
+		final double z = this.is3d ? zq % ds : Double.NEGATIVE_INFINITY; // relative z from cell floor SW corner (3d only)
 		
 		// add number of training points in this cell, 0 if null
 		final int num = this.cell_tpoints.containsKey(qcell) ? this.cell_tpoints.get(qcell) : 0;
@@ -212,17 +209,26 @@ public final class GetOverlaps
 		
 		for (int i = 0; i < this.N; i++) // filling sets
 		{
-			for (int j = 0; j < this.N; j++)
+			if (!this.is3d) // 2d case
 			{
-				final int zfactor =  this.is3d ? j * zfloor : 0; // if 3d add j*N*N
-				
-				south_row.add(i + zfactor);
-				north_row.add((this.N - 1) * this.N + i + zfactor);
-				west_column.add(i * this.N + zfactor);
-				east_column.add(i * this.N + this.N - 1 + zfactor);
-				
-				bottom_level.add(j * this.N + i);
-				top_level.add(j * this.N + i + (this.N - 1) * zfloor);
+				south_row.add(i);
+				north_row.add((this.N - 1) * this.N + i);
+				west_column.add(i * this.N);
+				east_column.add(i * this.N + this.N - 1);
+			}
+			else // 3d case
+			{
+				for (int j = 0; j < this.N; j++)
+				{
+					// if 3d add j*N*N
+					south_row.add(i + j * zfloor);
+					north_row.add((this.N - 1) * this.N + i + j * zfloor);
+					west_column.add(i * this.N + j * zfloor);
+					east_column.add(i * this.N + this.N - 1 + j * zfloor);
+					
+					bottom_level.add(j * this.N + i);
+					top_level.add(j * this.N + i + (this.N - 1) * zfloor);
+				}
 			}
 		}
 		
@@ -280,7 +286,7 @@ public final class GetOverlaps
 			
 			// 3d
 			if (this.is3d)
-			{				
+			{
 				// z-axis cells above
 				if (z + R > ds && !top_level.contains(intQCell)) // above cell, excluding top level
 				{
@@ -687,7 +693,7 @@ public final class GetOverlaps
 				
 				// checking for overlaps in surroundings
 				for (int square: surrounding_cells)
-				{				
+				{	
 					// proceed only if cell contains any training points and skip query point cell
 					if (square != intQCell && this.cell_tpoints.containsKey(String.valueOf(square)))
 					{
