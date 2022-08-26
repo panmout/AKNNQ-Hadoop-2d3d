@@ -23,7 +23,7 @@ mr4outputPath=mapreduce4
 #                                    EXECUTE                              #
 ###########################################################################
 
-hadoop jar ./target/aknn-hadoop-2d3d-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.main.Aknn \
+hadoop jar ./target/aknn-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.main.Aknn \
 partitioning=$partitioning \
 mode=$mode \
 K=$K \

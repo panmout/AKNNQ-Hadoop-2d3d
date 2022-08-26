@@ -13,7 +13,7 @@ type=1 # 1 for simple capacity based quadtree, 2 for all children split method, 
 ###########################################################################
 #                                    EXECUTE                              # ###########################################################################
 
-hadoop jar ./target/aknn-hadoop-2d3d-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.util.Qtree \
+hadoop jar ./target/aknn-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.util.Qtree \
 nameNode=$nameNode \
 trainingDir=$trainingDir \
 treeDir=$treeDir \
