@@ -1,6 +1,6 @@
 # AKNNQ-Hadoop
 
-## A MapReduce implementation of a parallel and distributed algorithm for efficient solving of the All K Nearest Neighbor query involving Big Data
+## MapReduce implementation of a parallel and distributed algorithm for efficient solving of the All K Nearest Neighbor query involving Big Data
 
 ### Description
 The algorithm needs two user provided spatial datasets of point objects in the form {int, double, double} for 2D or {int, double, double, double} for 3d, with their coordinates normalized in the area (0,1).
@@ -43,7 +43,7 @@ User must edit script file *createQTree.sh* and provide the appropriate paramete
 - trainingDir: (same as run.sh)
 - treeDir: (same as run.sh)
 - trainingDataset: (same as run.sh)
-- samplerate: desired sample rate of the *training* dataset. Give an integer 1 - 100
+- samplerate: desired sample rate of the *training* dataset. Give an integer between 1 - 100
 - capacity: the maximum desired number of *training* points in each cell
 - type: *1* (recommended) for simple capacity based quadtree, *2* for all children split method, *3* for average width method
 
