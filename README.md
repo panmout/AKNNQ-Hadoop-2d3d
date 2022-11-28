@@ -22,7 +22,7 @@ User must edit script file *run.sh* and provide the appropriate parameters:
 - K: the desired number of neighbors
 - reducers: the number of reducers
 - namenode: the name of the machine used as Namenode of the Hadoop cluster
-- N: the grid space decomposition parameter (in 2D it creates NxN equal sized square cells, in 3D it creates NxNxN equal sized cubic cells)
+- N: the grid space decomposition parameter (in 2D it creates N\*N equal sized square cells, in 3D it creates N\*N\*N equal sized cubic cells)
 - treeFile: the file name of the quad tree binary file, created by *createQTree.sh* or *createQTreeArray.sh* scripts
 - treeDir: the HDFS directory containing the *treeFile*
 - trainingDir: the HDFS directory containing the *training* dataset
