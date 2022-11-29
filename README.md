@@ -7,7 +7,7 @@ The algorithm needs two user provided spatial datasets of point objects in the f
 The user must also provide the number of neighbors *K* and the grid space decomposition parameter *N*.
 The first dataset is called *query* and the second dataset is called *training*.
 
-The algorithm uses two partitioning methods (grid and quad tree) and two computational methods (brute force and plane sweep).
+The algorithm uses two partitioning methods (*grid* and *quad tree*) and two computational methods (*brute force* and *plane sweep*).
 
 The algorithm consists of four MapReduce phases:
 1. Phase 1: Count the number of *training* points in every cell
@@ -19,8 +19,8 @@ The algorithm consists of four MapReduce phases:
 First of all, user must create the quad tree, if quad tree partitioning is selected, by running the appropriate script file (see next section).
 
 User must edit script file *run.sh* and provide the appropriate parameters:
-- partitioning: *gd* or *qt* for grid or quad tree partitioning, respectively
-- mode: *bf* or *ps* for brute force and quad tree computational methods, respectively
+- partitioning: *gd* or *qt* for *grid* or *quad tree* partitioning, respectively
+- mode: *bf* or *ps* for *brute force* and *plane sweep* computational methods, respectively
 - K: the desired number of neighbors
 - reducers: the number of reducers
 - namenode: the name of the machine used as Namenode of the Hadoop cluster
