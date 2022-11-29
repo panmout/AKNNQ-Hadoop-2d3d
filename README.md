@@ -20,7 +20,7 @@ First of all, user must create the quad tree, if quad tree partitioning is selec
 
 User must edit script file *run.sh* and provide the appropriate parameters:
 - partitioning: *gd* or *qt* for *grid* or *quad tree* partitioning, respectively
-- mode: *bf* or *ps* for *brute force* and *plane sweep* computational methods, respectively
+- mode: *bf* or *ps* for *brute force* or *plane sweep* computational methods, respectively
 - K: the desired number of neighbors
 - reducers: the number of reducers
 - namenode: the name of the machine used as Namenode of the Hadoop cluster
