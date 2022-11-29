@@ -11,7 +11,6 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-import gr.uth.ece.dsel.aknn_hadoop.util.AknnFunctions;
 import gr.uth.ece.dsel.aknn_hadoop.util.GetOverlaps;
 import gr.uth.ece.dsel.aknn_hadoop.util.IdDist;
 import gr.uth.ece.dsel.aknn_hadoop.util.IdDistComparator;
