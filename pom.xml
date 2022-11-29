@@ -8,7 +8,7 @@
   <artifactId>aknnq-hadoop</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
-  <name>aknn-hadoop</name>
+  <name>aknnq-hadoop</name>
   <url>https://github.com/panmout/AKNNQ-Hadoop</url>
 
   <properties>
