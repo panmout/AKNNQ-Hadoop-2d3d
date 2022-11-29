@@ -5,12 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>gr.uth.ece.dsel</groupId>
-  <artifactId>aknn-hadoop</artifactId>
+  <artifactId>aknnq-hadoop</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
   <name>aknn-hadoop</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/panmout/AKNNQ-Hadoop</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
