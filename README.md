@@ -13,7 +13,7 @@ The algorithm consists of four MapReduce phases:
 1. Phase 1: Count the number of *training* points in every cell
 2. Phase 2: Create a preliminary list of *K* nearest neighbors by searching inside each cell
 3. Phase 3: Try to discover neighbors in adjacent cells
-4. Phase 4: Merge lists of phases 3 and 4 into the final one.
+4. Phase 4: Merge lists of phases 2 and 3 into the final one.
 
 ### How to run
 User must edit script file *run.sh* and provide the appropriate parameters:
@@ -39,10 +39,10 @@ After that, just type /run.sh
 ### How to create a quad tree binary file
 There are two different script files, *createQTree.sh* and *createQTreeArray.sh* that create quad tree files using different methods. The first one is recommended and activated by default.
 User must edit script file *createQTree.sh* and provide the appropriate parameters:
-- nameNode: (same as run.sh)
-- trainingDir: (same as run.sh)
-- treeDir: (same as run.sh)
-- trainingDataset: (same as run.sh)
+- nameNode: (same as *run.sh*)
+- trainingDir: (same as *run.sh*)
+- treeDir: (same as *run.sh*)
+- trainingDataset: (same as *run.sh*)
 - samplerate: desired sample rate of the *training* dataset. Give an integer between 1 - 100
 - capacity: the maximum desired number of *training* points in each cell
 - type: *1* (recommended) for simple capacity based quadtree, *2* for all children split method, *3* for average width method
