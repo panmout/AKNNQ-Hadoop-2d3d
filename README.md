@@ -16,6 +16,8 @@ The algorithm consists of four MapReduce phases:
 4. Phase 4: Merge lists of phases 2 and 3 into the final one.
 
 ### How to run
+First of all, user must create the quad tree, if quad tree partitioning is selected, by running the appropriate script file (see next section).
+
 User must edit script file *run.sh* and provide the appropriate parameters:
 - partitioning: *gd* or *qt* for grid or quad tree partitioning, respectively
 - mode: *bf* or *ps* for brute force and quad tree computational methods, respectively
