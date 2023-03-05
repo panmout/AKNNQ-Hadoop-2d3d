@@ -7,17 +7,15 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 
 public final class BfNeighbors
 {
-	private ArrayList<Point> tpoints;
-	private int k;
-	private PriorityQueue<IdDist> neighbors;
-	private Context context;
-	
+	private final ArrayList<Point> tpoints;
+	private final int k;
+	private final PriorityQueue<IdDist> neighbors;
+
 	public BfNeighbors(ArrayList<Point> tp, int K, Context con)
 	{
 		this.tpoints = new ArrayList<Point>(tp);
 		this.k = K;
 		this.neighbors = new PriorityQueue<IdDist>(this.k, new IdDistComparator("max")); // max heap of K neighbors
-		this.context = con;
 	}
 	
 	public final PriorityQueue<IdDist> getNeighbors(Point qpoint)

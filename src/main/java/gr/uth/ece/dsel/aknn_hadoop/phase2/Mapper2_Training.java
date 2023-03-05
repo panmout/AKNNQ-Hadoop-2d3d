@@ -16,11 +16,6 @@ import gr.uth.ece.dsel.aknn_hadoop.util.ReadHdfsFiles;
 public class Mapper2_Training extends Mapper<LongWritable, Text, Text, Text>
 {
 	private String partitioning; // bf or qt
-	private String hostname; // hostname
-	private String username; // username
-	private String treeDir; // HDFS dir containing tree file
-	private String treeFileName; // tree file name in HDFS
-	private String treeFile; // full HDFS path to tree file
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	
@@ -54,19 +49,24 @@ public class Mapper2_Training extends Mapper<LongWritable, Text, Text, Text>
 		Configuration conf = context.getConfiguration();
 		
 		this.partitioning = conf.get("partitioning");
-		
-		this.hostname = conf.get("namenode"); // get namenode name
-		this.username = System.getProperty("user.name"); // get user name
-		
+
+		// hostname
+		String hostname = conf.get("namenode"); // get namenode name
+		// username
+		String username = System.getProperty("user.name"); // get user name
+
 		FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
 		
 		if (this.partitioning.equals("qt"))
 		{
-			this.treeDir = conf.get("treeDir"); // HDFS directory containing tree file
-			this.treeFileName = conf.get("treeFileName"); // get tree filename
-			this.treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", this.hostname, this.username, this.treeDir, this.treeFileName); // full HDFS path to tree file
-			
-			this.root = ReadHdfsFiles.getTree(this.treeFile, fs);
+			// HDFS dir containing tree file
+			String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
+			// tree file name in HDFS
+			String treeFileName = conf.get("treeFileName"); // get tree filename
+			// full HDFS path to tree file
+			String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
+
+			this.root = ReadHdfsFiles.getTree(treeFile, fs);
 		}
 		else if (this.partitioning.equals("gd"))
 			this.N = Integer.parseInt(conf.get("N")); // get N

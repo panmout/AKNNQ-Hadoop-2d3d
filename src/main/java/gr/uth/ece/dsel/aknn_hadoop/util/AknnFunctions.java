@@ -1,7 +1,6 @@
 package gr.uth.ece.dsel.aknn_hadoop.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.PriorityQueue;
 
 public final class AknnFunctions

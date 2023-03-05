@@ -6,9 +6,9 @@ import java.io.Serializable;
 
 public class Point implements Serializable
 {
-	private int id;
-	private double x;
-	private double y;
+	private final int id;
+	private final double x;
+	private final double y;
 	private double z = Double.NEGATIVE_INFINITY;
 	
 	public Point(int id, double x, double y)

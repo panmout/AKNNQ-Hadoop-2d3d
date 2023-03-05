@@ -7,17 +7,15 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 
 public final class PsNeighbors
 {
-	private ArrayList<Point> tpoints;
-	private int k;
-	private PriorityQueue<IdDist> neighbors;
-	private Context context;
-	
+	private final ArrayList<Point> tpoints;
+	private final int k;
+	private final PriorityQueue<IdDist> neighbors;
+
 	public PsNeighbors(ArrayList<Point> tp, int K, Context con)
 	{
 		this.tpoints = new ArrayList<Point>(tp);
 		this.k = K;
 		this.neighbors = new PriorityQueue<IdDist>(this.k, new IdDistComparator("max")); // max heap of K neighbors
-		this.context = con;
 	}
 	
 	public final PriorityQueue<IdDist> getNeighbors(Point qpoint)
@@ -38,10 +36,7 @@ public final class PsNeighbors
 			int high = 0;
 			
 			if (qpoint.getX() < x_left) // qpoint is at left of all tpoints
-			{
 				check_right = true;
-				low = 0;
-			}
 			else if (x_right < qpoint.getX()) // qpoint is at right of all tpoints
 			{
 				check_left = true;
@@ -60,13 +55,13 @@ public final class PsNeighbors
 			boolean cont_search = true; // set flag to true
 			
 			if (check_right)
-				while (low < this.tpoints.size() && cont_search == true) // scanning for neighbors to the right of tindex
+				while (low < this.tpoints.size() && cont_search) // scanning for neighbors to the right of tindex
 					cont_search = psNeighbors(qpoint, low++);
 			
 			cont_search = true; // reset flag to true
 			
 			if (check_left)
-				while (high >= 0 && cont_search == true) // scanning for neighbors to the left of tindex
+				while (high >= 0 && cont_search) // scanning for neighbors to the left of tindex
 					cont_search = psNeighbors(qpoint, high--);
 		} // end if
 	 	

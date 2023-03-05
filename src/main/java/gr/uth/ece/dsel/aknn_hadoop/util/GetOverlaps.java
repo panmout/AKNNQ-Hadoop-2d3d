@@ -10,7 +10,7 @@ public final class GetOverlaps
 	private final HashMap<String, Integer> cell_tpoints; // hashmap of training points per cell list from Phase 1 <cell_id, number of training points>
 	private final String partitioning; // gd or qt
 	private int N; // (2d) N*N or (3d) N*N*N cells
-	private int K; // AKNN K
+	private final int K; // AKNN K
 	private Node root; // create root node
 	private final HashSet<String> overlaps;
 	private String qcell;

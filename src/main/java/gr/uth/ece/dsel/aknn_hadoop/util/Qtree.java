@@ -4,19 +4,15 @@ public final class Qtree
 {
 	private static String trainingDataset; // training dataset name in HDFS
 	private static String nameNode; // hostname
-	private static String username; // username
 	private static String trainingDir; // HDFS dir containing training dataset
-	private static String trainingDatasetPath; // full HDFS path+name of training dataset
 	private static int samplerate; // percent sample of dataset
 	private static int capacity; // quad tree node maximum capacity
-	private static String treeFileName; // tree file name
 	private static String treeDir; // HDFS dir containing sample trees
-	private static String treeFilePath; // full hdfs path name
 	private static int type; // 1 for simple capacity based quadtree, 2 for all children split method, 3 for average width method
 	
 	public static void main(String[] args)
 	{
-		Long t0 = System.currentTimeMillis();
+		long t0 = System.currentTimeMillis();
 		
 		for (String arg: args)
 		{
@@ -43,11 +39,15 @@ public final class Qtree
 			else
 				throw new IllegalArgumentException("not a valid argument, must be \"name=arg\", : " + arg);
 		}
-				
-		username = System.getProperty("user.name");
-		trainingDatasetPath = String.format("hdfs://%s:9000/user/%s/%s/%s", nameNode, username, trainingDir, trainingDataset);
-		treeFileName = "qtree.ser";
-		treeFilePath = String.format("hdfs://%s:9000/user/%s/%s/%s", nameNode, username, treeDir, treeFileName);
+
+		// username
+		String username = System.getProperty("user.name");
+		// full HDFS path+name of training dataset
+		String trainingDatasetPath = String.format("hdfs://%s:9000/user/%s/%s/%s", nameNode, username, trainingDir, trainingDataset);
+		// tree file name
+		String treeFileName = "qtree.ser";
+		// full hdfs path name
+		String treeFilePath = String.format("hdfs://%s:9000/user/%s/%s/%s", nameNode, username, treeDir, treeFileName);
 		
 		CreateQTree qtree = new CreateQTree(capacity, treeFilePath, treeFileName, trainingDatasetPath, samplerate);
 		
@@ -69,7 +69,7 @@ public final class Qtree
 				break;
 		}
 		
-		Long treetime = System.currentTimeMillis() - t0;
+		long treetime = System.currentTimeMillis() - t0;
 		
 		System.out.printf("Quadtree {%s, capacity: %d, samplerate: %d} creation time: %d millis\n", qtreeType, capacity, samplerate, treetime);
 	}

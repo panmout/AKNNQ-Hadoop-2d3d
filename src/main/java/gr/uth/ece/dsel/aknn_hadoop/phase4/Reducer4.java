@@ -32,7 +32,7 @@ public class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 				for (int i = 0; i < data.length - 1; i += 2) // fill neighbors list
 				{
 					int tid = Integer.parseInt(data[i]); // first element of couple is point id
-					Double dist = Double.parseDouble(data[i+1]); // second element of couple is distance
+					double dist = Double.parseDouble(data[i+1]); // second element of couple is distance
 					IdDist neighbor = new IdDist(tid, dist);
 					if (!AknnFunctions.isDuplicate(neighbors, neighbor))
 			    		neighbors.offer(neighbor); // insert to queue

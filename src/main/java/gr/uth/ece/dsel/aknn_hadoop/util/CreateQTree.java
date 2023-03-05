@@ -20,15 +20,15 @@ public final class CreateQTree
 	private Formatter outputTextFile; // local output text file
 	private FileOutputStream fileout;
 	private ObjectOutputStream outputObjectFile; // local output object file
-	private int capacity;
+	private final int capacity;
 	private HashMap<Integer, Double[]> sample_dataset;
 	private int numCells = 0;
 	private String x = "";
-	private String treeFilePath;
-	private String treeFileName;
-	private String trainingDatasetPath;
-	private int samplerate;
-	private HashSet<Double> widths = new HashSet<Double>(); // store cell widths
+	private final String treeFilePath;
+	private final String treeFileName;
+	private final String trainingDatasetPath;
+	private final int samplerate;
+	private final HashSet<Double> widths = new HashSet<Double>(); // store cell widths
 	private boolean is3d = false; // 2d or 3d quad tree (set in readSample() method)
 	
 	public CreateQTree(int newCapacity, String newTreeFilePath, String newTreeFileName, String newTrainingDatasetPath, int newSamplerate)

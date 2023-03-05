@@ -13,7 +13,7 @@ import org.apache.hadoop.fs.Path;
 public final class ReadHdfsFiles
 {
 	// read treefile from hdfs
-	public static final Node getTree(String treeFile, FileSystem fs)
+	public static Node getTree(String treeFile, FileSystem fs)
 	{
 		Node root = null;
 		
@@ -35,7 +35,7 @@ public final class ReadHdfsFiles
 	}
 	
 	// read mapreduce1 output from hdfs as hashmap
-	public static final HashMap<String, Integer> getMR1output(String mr1OutFull, FileSystem fs)
+	public static HashMap<String, Integer> getMR1output(String mr1OutFull, FileSystem fs)
 	{
 		HashMap<String, Integer> cell_tpoints = new HashMap<String, Integer>();
 		
@@ -54,7 +54,7 @@ public final class ReadHdfsFiles
 				
 				while ((line = reader.readLine())!= null) // while input has more lines
 				{
-					String data[] = line.trim().split("\t");
+					String[] data = line.trim().split("\t");
 					String cell = data[0]; // 1st element is point cell
 					Integer num = Integer.parseInt(data[1]); // 2nd element is number of training points in cell
 					cell_tpoints.put(cell, num); // add to hashmap

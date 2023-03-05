@@ -16,11 +16,6 @@ import gr.uth.ece.dsel.aknn_hadoop.util.ReadHdfsFiles;
 public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 {
 	private String partitioning; // bf or qt
-	private String hostname; // hostname
-	private String username; // username
-	private String treeDir; // HDFS dir containing tree file
-	private String treeFileName; // tree file name in HDFS
-	private String treeFile; // full HDFS path to tree file
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	
@@ -54,18 +49,23 @@ public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 		Configuration conf = context.getConfiguration();
 		
 		partitioning = conf.get("partitioning");
-		
-		hostname = conf.get("namenode"); // get namenode name
-		username = System.getProperty("user.name"); // get user name
-		
+
+		// hostname
+		String hostname = conf.get("namenode"); // get namenode name
+		// username
+		String username = System.getProperty("user.name"); // get user name
+
 		FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
 		
 		if (partitioning.equals("qt"))
 		{
-			treeDir = conf.get("treeDir"); // HDFS directory containing tree file
-			treeFileName = conf.get("treeFileName"); // get tree filename
-			treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
-			
+			// HDFS dir containing tree file
+			String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
+			// tree file name in HDFS
+			String treeFileName = conf.get("treeFileName"); // get tree filename
+			// full HDFS path to tree file
+			String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
+
 			root = ReadHdfsFiles.getTree(treeFile, fs);
 		}
 		else if (partitioning.equals("gd"))
