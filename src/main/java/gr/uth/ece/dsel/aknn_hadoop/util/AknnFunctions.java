@@ -7,19 +7,19 @@ import java.util.PriorityQueue;
 public final class AknnFunctions
 {
 	// return euclidean distance between two 2d points (x1, y1) and (x2, y2)
-	public static final double distance (double x1, double y1, double x2, double y2)
+	public static double distance (double x1, double y1, double x2, double y2)
 	{
 		return Math.sqrt(square_distance (x1, y1, x2, y2));
 	}// end euclidean distance
 	
 	// return euclidean distance between two 3d points (x1, y1, z1) and (x2, y2, z2)
-	public static final double distance (double x1, double y1, double z1, double x2, double y2, double z2)
+	public static double distance (double x1, double y1, double z1, double x2, double y2, double z2)
 	{
 		return Math.sqrt(square_distance (x1, y1, z1, x2, y2, z2));
 	}// end euclidean distance
 	
 	// return euclidean distance between two points
-	public static final double distance (Point ipoint, Point tpoint)
+	public static double distance (Point ipoint, Point tpoint)
 	{
 		// 3d points
 		if (ipoint.getZ() != Double.NEGATIVE_INFINITY && tpoint.getZ() != Double.NEGATIVE_INFINITY)
@@ -29,25 +29,25 @@ public final class AknnFunctions
 	}// end euclidean distance
 	
 	// return square of euclidean distance between two 2d points (x1, y1) and (x2, y2)
-	public static final double square_distance (double x1, double y1, double x2, double y2)
+	public static double square_distance (double x1, double y1, double x2, double y2)
 	{
 		return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2);
 	}// end square of euclidean distance
 	
 	// return square of euclidean distance between two 3d points (x1, y1, z1) and (x2, y2, z2)
-	public static final double square_distance (double x1, double y1, double z1, double x2, double y2, double z2)
+	public static double square_distance (double x1, double y1, double z1, double x2, double y2, double z2)
 	{
 		return Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2,  2);
 	}// end square of euclidean distance
 	
 	// return x-distance between two points
-	public static final double xDistance (Point qpoint, Point tpoint)
+	public static double xDistance (Point qpoint, Point tpoint)
 	{
 		return Math.abs(qpoint.getX() - tpoint.getX());
 	}
 		
 	// String to point
-	public static final Point stringToPoint(String line, String sep)
+	public static Point stringToPoint(String line, String sep)
 	{
 		final String[] data = line.trim().split(sep);
 		final int id = Integer.parseInt(data[0]);
@@ -119,7 +119,7 @@ public final class AknnFunctions
 	k = {(cell-i)/n-j}/n
 	*/
 	
-	public static final String pointToCellGD(Point p, int n)
+	public static String pointToCellGD(Point p, int n)
 	{
 		final double ds = 1.0 / n; // interval ds (cell width)
 		final double x = p.getX();  // p.x
@@ -146,7 +146,7 @@ public final class AknnFunctions
 //	}
 	
 	// point to QT cell
-	public static final String pointToCellQT(Point p, Node node)
+	public static String pointToCellQT(Point p, Node node)
 	{
 		if (node.getCNE() == null) // 2d
 			return pointToCellQT(p.getX(), p.getY(), node);
@@ -155,7 +155,7 @@ public final class AknnFunctions
 	}
 	
 	// point to QT cell 2d
-	public static final String pointToCellQT (double x, double y, Node node)
+	public static String pointToCellQT (double x, double y, Node node)
 	{
 		// define x, y
 		double xmin = node.getXmin();
@@ -171,27 +171,19 @@ public final class AknnFunctions
 			if (x >= xmin && x < xmid) // point inside SW or NW
 			{
 				if (y >= ymin && y < ymid) // point inside SW
-				{
 					return "2" + pointToCellQT(x, y, node.getSW());
-				}
 				else if (y >= ymid && y < ymax) // point inside NW
-				{
 					return "0" + pointToCellQT(x, y, node.getNW());
-				}
 			}
 			else if (x >= xmid && x < xmax) // point inside SE or NE
 			{
 				if (y >= ymin && y < ymid) // point inside SE
-				{
 					return "3" + pointToCellQT(x, y, node.getSE());
-				}
 				else if (y >= ymid && y < ymax) // point inside NE
-				{
 					return "1" + pointToCellQT(x, y, node.getNE());
-				}
 			}
 		}
-		return new String("");
+		return "";
 	}
 	
 	// point to QT cell 3d
@@ -217,24 +209,16 @@ public final class AknnFunctions
 				if (y >= ymin && y < ymid) // point inside SW (Floor or Ceiling)
 				{
 					if (z >= zmin && z < zmid) // point inside FSW
-					{
 						return "2" + pointToCellQT(x, y, z, node.getFSW());
-					}
 					else if (z >= zmid && z < zmax) // point inside CSW
-					{
 						return "6" + pointToCellQT(x, y, z, node.getCSW());
-					}						
 				}
 				else if (y >= ymid && y < ymax) // point inside NW (Floor or Ceiling)
 				{
 					if (z >= zmin && z < zmid) // point inside FNW
-					{
 						return "0" + pointToCellQT(x, y, z, node.getFNW());
-					}
 					else if (z >= zmid && z < zmax) // point inside CNW
-					{
 						return "4" + pointToCellQT(x, y, z, node.getCNW());
-					}	
 				}
 			}
 			else if (x >= xmid && x < xmax) // point inside SE or NE (Floor or Ceiling)
@@ -242,45 +226,34 @@ public final class AknnFunctions
 				if (y >= ymin && y < ymid) // point inside SE (Floor or Ceiling)
 				{
 					if (z >= zmin && z < zmid) // point inside FSE
-					{
 						return "3" + pointToCellQT(x, y, z, node.getFSE());
-					}
 					else if (z >= zmid && z < zmax) // point inside CSE
-					{
 						return "7" + pointToCellQT(x, y, z, node.getCSE());
-					}
 				}
 				else if (y >= ymid && y < ymax) // point inside NE (Floor or Ceiling)
 				{
 					if (z >= zmin && z < zmid) // point inside FNE
-					{
 						return "1" + pointToCellQT(x, y, z, node.getFNE());
-					}
 					else if (z >= zmid && z < zmax) // point inside CNE
-					{
 						return "5" + pointToCellQT(x, y, z, node.getCNE());
-					}
 				}
 			}
 		}
-		return new String("");
+		return "";
 	}
 	
 	// check for duplicates in PriorityQueue
-	public static final boolean isDuplicate(PriorityQueue<IdDist> pq, IdDist neighbor)
+	public static boolean isDuplicate(PriorityQueue<IdDist> pq, IdDist neighbor)
 	{
-		Iterator<IdDist> it = pq.iterator();
-		while (it.hasNext())
-		{
-			IdDist elem = it.next();
+		for (IdDist elem : pq)
 			if (elem.getId() == neighbor.getId())
 				return true;
-		}
+
 		return false;
 	}
 	
 	// PriorityQueue<IdDist> to String
-	public static final String pqToString(PriorityQueue<IdDist> pq, int k)
+	public static String pqToString(PriorityQueue<IdDist> pq, int k)
 	{
 		// if we use pq directly, it will modify the original PQ, so we make a copy
 		PriorityQueue<IdDist> newPQ = new PriorityQueue<IdDist>(pq);
@@ -302,7 +275,7 @@ public final class AknnFunctions
 	}
 	
 	// return point array index for point interpolation
-	public static final int binarySearchTpoints(double x, ArrayList<Point> points)
+	public static int binarySearchTpoints(double x, ArrayList<Point> points)
 	{
 		int low = 0;
 		int high = points.size() - 1;
@@ -314,22 +287,14 @@ public final class AknnFunctions
 			if (x >= points.get(middle).getX())
 			{
 				if (middle == points.size() - 1) // middle = array length
-				{
 					location = middle;
-				}
 				else if (x < points.get(middle + 1).getX()) // x between middle and high
-				{
 					location = middle;
-				}
 				else // x greater than middle but not smaller than middle+1
-				{
 					low = middle + 1;
-				}
 			}
 			else // x smaller than middle
-			{
 				high = middle - 1;
-			}
 			
 			middle = (low + high + 1) / 2; // recalculate middle
 			
