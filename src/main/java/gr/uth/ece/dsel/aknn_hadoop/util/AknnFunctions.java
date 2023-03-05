@@ -255,7 +255,7 @@ public final class AknnFunctions
 	public static String pqToString(PriorityQueue<IdDist> pq, int k)
 	{
 		// if we use pq directly, it will modify the original PQ, so we make a copy
-		PriorityQueue<IdDist> newPQ = new PriorityQueue<IdDist>(pq);
+		PriorityQueue<IdDist> newPQ = new PriorityQueue<>(pq);
 		
 		StringBuilder output = new StringBuilder();
 		

@@ -37,7 +37,7 @@ public final class ReadHdfsFiles
 	// read mapreduce1 output from hdfs as hashmap
 	public static HashMap<String, Integer> getMR1output(String mr1OutFull, FileSystem fs)
 	{
-		HashMap<String, Integer> cell_tpoints = new HashMap<String, Integer>();
+		HashMap<String, Integer> cell_tpoints = new HashMap<>();
 		
 		try // open files
 		{

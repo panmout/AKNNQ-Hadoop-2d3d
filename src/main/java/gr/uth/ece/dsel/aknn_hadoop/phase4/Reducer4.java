@@ -19,7 +19,7 @@ public class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 	@Override
 	public void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException
 	{	
-		PriorityQueue<IdDist> neighbors = new PriorityQueue<IdDist>(this.K, new IdDistComparator("min")); // neighbors queue by distance ascending
+		PriorityQueue<IdDist> neighbors = new PriorityQueue<>(this.K, new IdDistComparator("min")); // neighbors queue by distance ascending
 				
 		int trueCounter = 0; // +1 for "true"
 		

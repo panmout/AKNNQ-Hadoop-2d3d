@@ -31,8 +31,8 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		
 		// read input data: point id, x, y, z, cell id, neighbor list
 		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 3, 5, 7,...
-		Point qpoint = null;
-		String qcell = null;
+		Point qpoint;
+		String qcell;
 		
 		this.neighbors.clear();
 		
@@ -70,7 +70,7 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		// get overlapped cells
 		this.ovl.initializeFields(qpoint, qcell, this.neighbors);
 
-		HashSet<String> overlaps = new HashSet<String>(this.ovl.getOverlaps());
+		HashSet<String> overlaps = new HashSet<>(this.ovl.getOverlaps());
 		
 		// write output:
 		// no overlaps: {query cell, qpoint id, true}
@@ -116,12 +116,12 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		
 		// read MR1 output into hashmap
 		// hashmap of training points per cell list from MR1 {[cell_id, number of training points]}
-		HashMap<String, Integer> cell_tpoints = new HashMap<String, Integer>(ReadHdfsFiles.getMR1output(mr_1_out_full, fs));
+		HashMap<String, Integer> cell_tpoints = new HashMap<>(ReadHdfsFiles.getMR1output(mr_1_out_full, fs));
 		
 		// initialize overlaps object
 		this.ovl = new GetOverlaps(cell_tpoints, k, partitioning);
 		
-		this.neighbors = new PriorityQueue<IdDist>(k, new IdDistComparator("max")); // max heap
+		this.neighbors = new PriorityQueue<>(k, new IdDistComparator("max")); // max heap
 		
 		// read qtree or N
 		if (partitioning.equals("qt"))

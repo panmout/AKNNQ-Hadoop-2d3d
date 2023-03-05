@@ -105,9 +105,9 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 		
 		this.mode = conf.get("mode");
 		
-		this.neighbors = new PriorityQueue<IdDist>(this.K, new IdDistComparator("min")); // min heap of K neighbors
+		this.neighbors = new PriorityQueue<>(this.K, new IdDistComparator("min")); // min heap of K neighbors
 		
-		this.qpoints = new ArrayList<Point>();
-		this.tpoints = new ArrayList<Point>();
+		this.qpoints = new ArrayList<>();
+		this.tpoints = new ArrayList<>();
 	}
 }

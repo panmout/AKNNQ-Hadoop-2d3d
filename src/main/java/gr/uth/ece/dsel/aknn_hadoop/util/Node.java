@@ -9,7 +9,7 @@ public final class Node implements Serializable
 	private Node nw, ne, sw, se; // 2d children
 	private Node cnw, cne, csw, cse, fnw, fne, fsw, fse; // 3d children (c: ceiling, f: floor)
 	private double xmin, xmax, ymin, ymax, zmin, zmax; // node boundaries
-	private HashSet<Integer> contPoints = new HashSet<Integer>(); // points contained
+	private HashSet<Integer> contPoints = new HashSet<>(); // points contained
 	
 	// 2d constructor
 	public Node (double xmin, double ymin, double xmax, double ymax)
@@ -316,7 +316,7 @@ public final class Node implements Serializable
 
 	public void setContPoints(HashSet<Integer> contPoints)
 	{
-		this.contPoints = new HashSet<Integer>(contPoints);
+		this.contPoints = new HashSet<>(contPoints);
 	}
 	
 	public void removePoint(int i)

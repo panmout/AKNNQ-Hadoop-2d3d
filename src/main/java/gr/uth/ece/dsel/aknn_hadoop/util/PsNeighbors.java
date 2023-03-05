@@ -13,9 +13,9 @@ public final class PsNeighbors
 
 	public PsNeighbors(ArrayList<Point> tp, int K, Context con)
 	{
-		this.tpoints = new ArrayList<Point>(tp);
+		this.tpoints = new ArrayList<>(tp);
 		this.k = K;
-		this.neighbors = new PriorityQueue<IdDist>(this.k, new IdDistComparator("max")); // max heap of K neighbors
+		this.neighbors = new PriorityQueue<>(this.k, new IdDistComparator("max")); // max heap of K neighbors
 	}
 	
 	public PriorityQueue<IdDist> getNeighbors(Point qpoint)

@@ -28,7 +28,7 @@ public final class CreateQTree
 	private final String treeFileName;
 	private final String trainingDatasetPath;
 	private final int samplerate;
-	private final HashSet<Double> widths = new HashSet<Double>(); // store cell widths
+	private final HashSet<Double> widths = new HashSet<>(); // store cell widths
 	private boolean is3d = false; // 2d or 3d quad tree (set in readSample() method)
 	
 	public CreateQTree(int newCapacity, String newTreeFilePath, String newTreeFileName, String newTrainingDatasetPath, int newSamplerate)
@@ -392,9 +392,9 @@ public final class CreateQTree
 			Path trainingPath = new Path(this.trainingDatasetPath);
 			BufferedReader trainingBr = new BufferedReader(new InputStreamReader(fs.open(trainingPath))); // open HDFS training dataset file
 			
-			this.sample_dataset = new HashMap<Integer, Double[]>();
+			this.sample_dataset = new HashMap<>();
 			
-			HashSet<Integer> randomNumbers = new HashSet<Integer>(this.samplerate); // [percentSample] size set for random integers
+			HashSet<Integer> randomNumbers = new HashSet<>(this.samplerate); // [percentSample] size set for random integers
 			
 			Random random = new Random();
 			

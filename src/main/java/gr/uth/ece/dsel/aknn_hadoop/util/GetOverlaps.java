@@ -196,14 +196,14 @@ public final class GetOverlaps
 		final int num = this.cell_tpoints.getOrDefault(qcell, 0);
 		
 		// top-bottom rows, far left-right columns (rows and columns become walls in 3d)
-		final HashSet<Integer> south_row = new HashSet<Integer>(); // no S, SE, SW for cells in this set
-		final HashSet<Integer> north_row = new HashSet<Integer>(); // no N, NE, NW for cells in this set
-		final HashSet<Integer> west_column = new HashSet<Integer>(); // no W, NW, SW for cells in this set
-		final HashSet<Integer> east_column = new HashSet<Integer>(); // no E, NE, SE for cells in this set
+		final HashSet<Integer> south_row = new HashSet<>(); // no S, SE, SW for cells in this set
+		final HashSet<Integer> north_row = new HashSet<>(); // no N, NE, NW for cells in this set
+		final HashSet<Integer> west_column = new HashSet<>(); // no W, NW, SW for cells in this set
+		final HashSet<Integer> east_column = new HashSet<>(); // no E, NE, SE for cells in this set
 		
 		// top-bottom z-level cells
-		final HashSet<Integer> bottom_level = new HashSet<Integer>(); // no lower level (-n*n) for cells in this set
-		final HashSet<Integer> top_level = new HashSet<Integer>(); // no upper level (+n*n) for cells in this set
+		final HashSet<Integer> bottom_level = new HashSet<>(); // no lower level (-n*n) for cells in this set
+		final HashSet<Integer> top_level = new HashSet<>(); // no upper level (+n*n) for cells in this set
 		
 		final int zfloor = this.N * this.N; // N*N: when added/subtracted goes one floor up/down
 		
@@ -235,7 +235,7 @@ public final class GetOverlaps
 		// case 1: there are at least knn in this cell
 		if (num >= this.K && R <= ds)
 		{
-			final HashSet<Integer> int_overlaps = new HashSet<Integer>(); // set of overlapping cells
+			final HashSet<Integer> int_overlaps = new HashSet<>(); // set of overlapping cells
 			
 			// 2d
 			// draw circle and check for overlaps
@@ -459,10 +459,10 @@ public final class GetOverlaps
 		else
 		{
 			// set of surrounding cells
-			final HashSet<Integer> surrounding_cells = new HashSet<Integer>();
+			final HashSet<Integer> surrounding_cells = new HashSet<>();
 			
 			// dummy set of cells to be added (throws ConcurrentModificationException if trying to modify set while traversing it)
-			final HashSet<Integer> addSquaresList = new HashSet<Integer>();
+			final HashSet<Integer> addSquaresList = new HashSet<>();
 			
 			int overlaps_points = 0; // total number of training points in overlaps
 			
