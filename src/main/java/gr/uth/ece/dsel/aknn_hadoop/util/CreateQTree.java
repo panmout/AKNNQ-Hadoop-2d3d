@@ -41,7 +41,7 @@ public final class CreateQTree
 	}
 	
 	// create root node (maximum capacity method)
-	private final Node createQT(Node node)
+	private Node createQT(Node node)
 	{
 		if (node.getContPoints().size() > this.capacity)
 		{
@@ -71,7 +71,7 @@ public final class CreateQTree
 	}
 	
 	// create root node (all children split method)
-	private final Node createQT(Node node, boolean force)
+	private Node createQT(Node node, boolean force)
 	{
 		if (node.getContPoints().size() > this.capacity || (force == true))
 		{
@@ -157,7 +157,7 @@ public final class CreateQTree
 	}
 	
 	// create root node (average width split method)
-	private final Node createQT(Node node, double avgWidth)
+	private Node createQT(Node node, double avgWidth)
 	{
 		if ((node.getContPoints().size() > this.capacity) || (node.getXmax() - node.getXmin() > avgWidth)) // divide node only if it has many points or is bigger than average size
 		{
@@ -187,7 +187,7 @@ public final class CreateQTree
 	}
 	
 	// create children and split sample training points
-	private final Node createChildren(Node node)
+	private Node createChildren(Node node)
 	{
 		// define x, y
 		double xmin = node.getXmin();
@@ -308,7 +308,7 @@ public final class CreateQTree
 		return node;
 	}
 	
-	private final void df_repr(Node node) // create qtree in string form
+	private void df_repr(Node node) // create qtree in string form
 	{
 		if (!this.is3d) // 2d case
 		{
@@ -352,7 +352,7 @@ public final class CreateQTree
 	}
 	
 	// get leaves widths
-	private final void getWidths(Node node)
+	private void getWidths(Node node)
 	{		
 		if (node.getNW() == null || node.getCNW() == null)
 			this.widths.add(node.getXmax() - node.getXmin());
@@ -380,7 +380,7 @@ public final class CreateQTree
 		}
 	}
 	
-	private final void readSample()
+	private void readSample()
 	{
 		try // open files
 		{
@@ -433,7 +433,7 @@ public final class CreateQTree
 		}
 	}
 	
-	private final void writeFiles(Node node)
+	private void writeFiles(Node node)
 	{		
 		// write to files
 		try
@@ -467,7 +467,7 @@ public final class CreateQTree
 	}
 	
 	// create quadtree (capacity based only)
-	public final void createQTree()
+	public void createQTree()
 	{
 		readSample();
 		
@@ -494,7 +494,7 @@ public final class CreateQTree
 	}
 	
 	// create quadtree (all children split method = if one child splits, all will)
-	public final void createAllChldSplitQTree()
+	public void createAllChldSplitQTree()
 	{
 		readSample();
 		
@@ -521,7 +521,7 @@ public final class CreateQTree
 	}
 	
 	// create quadtree (capacity based only)
-	public final void createAvgWidthQTree()
+	public void createAvgWidthQTree()
 	{
 		readSample();
 		

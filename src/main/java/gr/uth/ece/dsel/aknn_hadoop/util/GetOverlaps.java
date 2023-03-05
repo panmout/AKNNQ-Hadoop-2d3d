@@ -20,30 +20,30 @@ public final class GetOverlaps
 	
 	public GetOverlaps (HashMap<String, Integer> cell_tpoints, int k, String partitioning)
 	{
-		this.cell_tpoints = new HashMap<String, Integer>(cell_tpoints);
+		this.cell_tpoints = new HashMap<>(cell_tpoints);
 		this.K = k;
 		this.partitioning = partitioning;
-		this.overlaps = new HashSet<String>();
+		this.overlaps = new HashSet<>();
 	}
 	
 	public void initializeFields (Point qp, String qc, PriorityQueue<IdDist> phase2neighbors)
 	{
 		this.qpoint = qp;
 		this.qcell = qc;
-		this.neighbors = new PriorityQueue<IdDist>(phase2neighbors);
+		this.neighbors = new PriorityQueue<>(phase2neighbors);
 	}
 	
-	public final void setN (int n)
+	public void setN (int n)
 	{
 		this.N = n;
 	}
 	
-	public final void setRoot (Node root)
+	public void setRoot (Node root)
 	{
 		this.root = root;
 	}
 	
-	public final HashSet<String> getOverlaps()
+	public HashSet<String> getOverlaps()
 	{
 		this.overlaps.clear();
 		
@@ -60,7 +60,7 @@ public final class GetOverlaps
 	}
 	
 	// find grid query overlaps
-	private final void getOverlapsGD (String qcell, Point qpoint)
+	private void getOverlapsGD (String qcell, Point qpoint)
 	{
 		/*
 		Cell array (numbers inside cells are cell_id)
@@ -1049,7 +1049,7 @@ public final class GetOverlaps
 	} // end getOverlapsGD
 	
 	// find quadtree query overlaps
-	private final void getOverlapsQT (String qcell, Point qpoint)
+	private void getOverlapsQT (String qcell, Point qpoint)
 	{
     	// read query point coordinates and neighbors list
     	final double xq = qpoint.getX();
@@ -1260,7 +1260,7 @@ public final class GetOverlaps
 		}
 	}
 	
-	private final void rangeQuery (double x, double y, double r, Node node, String address)
+	private void rangeQuery (double x, double y, double r, Node node, String address)
 	{
 		if (node.getNW() == null) // leaf node
 			this.overlaps.add(address);
@@ -1282,7 +1282,7 @@ public final class GetOverlaps
 		}
 	}
 	
-	private final boolean intersect (double x, double y, double r, Node node)
+	private boolean intersect (double x, double y, double r, Node node)
 	{
 		// if point is inside cell return true
 		if (x >= node.getXmin() && x <= node.getXmax() && y >= node.getYmin() && y <= node.getYmax())
@@ -1319,7 +1319,7 @@ public final class GetOverlaps
 		return corner_dist_sq <= r * r;
 	}
 	
-	private final void rangeQuery(double x, double y, double z, double r, Node node, String address)
+	private void rangeQuery(double x, double y, double z, double r, Node node, String address)
 	{
 		if (node.getFNW() == null) // leaf node
 			this.overlaps.add(address);
@@ -1352,7 +1352,7 @@ public final class GetOverlaps
 		}
 	}
 	
-	private final boolean intersect(Node node, double x, double y, double z, double r)
+	private boolean intersect(Node node, double x, double y, double z, double r)
 	{
 		// if point is inside cell return true
 		if (x >= node.getXmin() && x <= node.getXmax() && y >= node.getYmin() && y <= node.getYmax() && z >= node.getZmin() && z <= node.getZmax())

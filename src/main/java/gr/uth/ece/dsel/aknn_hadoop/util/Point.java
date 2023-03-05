@@ -4,7 +4,7 @@ package gr.uth.ece.dsel.aknn_hadoop.util;
 
 import java.io.Serializable;
 
-public class Point implements Serializable
+public final class Point implements Serializable
 {
 	private final int id;
 	private final double x;
@@ -26,22 +26,22 @@ public class Point implements Serializable
 		this.z = z;
 	}
 	
-	public final int getId()
+	public int getId()
 	{
 		return this.id;
 	}
 	
-	public final double getX()
+	public double getX()
 	{
 		return this.x;
 	}
 	
-	public final double getY()
+	public double getY()
 	{
 		return this.y;
 	}
 	
-	public final double getZ()
+	public double getZ()
 	{
 		return this.z;
 	}

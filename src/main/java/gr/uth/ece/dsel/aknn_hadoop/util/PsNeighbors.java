@@ -18,7 +18,7 @@ public final class PsNeighbors
 		this.neighbors = new PriorityQueue<IdDist>(this.k, new IdDistComparator("max")); // max heap of K neighbors
 	}
 	
-	public final PriorityQueue<IdDist> getNeighbors(Point qpoint)
+	public PriorityQueue<IdDist> getNeighbors(Point qpoint)
 	{
 		this.neighbors.clear();
 		
@@ -69,7 +69,7 @@ public final class PsNeighbors
 	 	// end PsNeighbors
 	}
 	
-	private final boolean psNeighbors(Point qpoint, int i)
+	private boolean psNeighbors(Point qpoint, int i)
 	{
 		final Point tpoint = this.tpoints.get(i); // get tpoint
 		

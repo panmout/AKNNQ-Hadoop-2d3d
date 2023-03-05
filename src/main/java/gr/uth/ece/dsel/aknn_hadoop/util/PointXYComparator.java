@@ -23,7 +23,7 @@ public final class PointXYComparator implements Comparator<Point>
 	}
 	
 	@Override
-	public final int compare(Point element1, Point element2)
+	public int compare(Point element1, Point element2)
 	{
 		switch (this.xy)
 		{

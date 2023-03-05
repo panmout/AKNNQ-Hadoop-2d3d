@@ -18,7 +18,7 @@ public final class BfNeighbors
 		this.neighbors = new PriorityQueue<IdDist>(this.k, new IdDistComparator("max")); // max heap of K neighbors
 	}
 	
-	public final PriorityQueue<IdDist> getNeighbors(Point qpoint)
+	public PriorityQueue<IdDist> getNeighbors(Point qpoint)
 	{
 		this.neighbors.clear();
 		

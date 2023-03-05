@@ -34,215 +34,215 @@ public final class Node implements Serializable
 		this.zmax = zmax;
 	}
 	/*
-	public final int getLow()
+	public int getLow()
 	{
 		return this.low;
 	}
 
-	public final void setLow(int low)
+	public void setLow(int low)
 	{
 		this.low = low;
 	}
 
-	public final int getHigh()
+	public int getHigh()
 	{
 		return this.high;
 	}
 
-	public final void setHigh(int high)
+	public void setHigh(int high)
 	{
 		this.high = high;
 	}
 	*/
 	// 2d set-get
-	public final double getXmin()
+	public double getXmin()
 	{
 		return this.xmin;
 	}
 
-	public final void setXmin(double xmin)
+	public void setXmin(double xmin)
 	{
 		this.xmin = xmin;
 	}
 
-	public final double getXmax()
+	public double getXmax()
 	{
 		return this.xmax;
 	}
 
-	public final void setXmax(double xmax)
+	public void setXmax(double xmax)
 	{
 		this.xmax = xmax;
 	}
 
-	public final double getYmin()
+	public double getYmin()
 	{
 		return this.ymin;
 	}
 
-	public final void setYmin(double ymin)
+	public void setYmin(double ymin)
 	{
 		this.ymin = ymin;
 	}
 
-	public final double getYmax()
+	public double getYmax()
 	{
 		return this.ymax;
 	}
 
-	public final void setYmax(double ymax)
+	public void setYmax(double ymax)
 	{
 		this.ymax = ymax;
 	}
 	
-	public final Node getNW()
+	public Node getNW()
 	{
 		return this.nw;
 	}
 
-	public final void setNW(Node nW)
+	public void setNW(Node nW)
 	{
 		this.nw = nW;
 	}
 
-	public final Node getNE()
+	public Node getNE()
 	{
 		return this.ne;
 	}
 
-	public final void setNE(Node nE)
+	public void setNE(Node nE)
 	{
 		this.ne = nE;
 	}
 
-	public final Node getSW()
+	public Node getSW()
 	{
 		return this.sw;
 	}
 
-	public final void setSW(Node sW)
+	public void setSW(Node sW)
 	{
 		this.sw = sW;
 	}
 
-	public final Node getSE()
+	public Node getSE()
 	{
 		return this.se;
 	}
 
-	public final void setSE(Node sE)
+	public void setSE(Node sE)
 	{
 		this.se = sE;
 	}
 	
 	// 3d set-get
-	public final double getZmin()
+	public double getZmin()
 	{
 		return this.zmin;
 	}
 
-	public final void setZmin(double zmin)
+	public void setZmin(double zmin)
 	{
 		this.zmin = zmin;
 	}
 
-	public final double getZmax()
+	public double getZmax()
 	{
 		return this.zmax;
 	}
 
-	public final void setZmax(double zmax)
+	public void setZmax(double zmax)
 	{
 		this.zmax = zmax;
 	}
 	
-	public final Node getFNW()
+	public Node getFNW()
 	{
 		return this.fnw;
 	}
 
-	public final void setFNW(Node fnw)
+	public void setFNW(Node fnw)
 	{
 		this.fnw = fnw;
 	}
 
-	public final Node getFNE()
+	public Node getFNE()
 	{
 		return this.fne;
 	}
 
-	public final void setFNE(Node fne)
+	public void setFNE(Node fne)
 	{
 		this.fne = fne;
 	}
 
-	public final Node getFSW()
+	public Node getFSW()
 	{
 		return this.fsw;
 	}
 
-	public final void setFSW(Node fsw)
+	public void setFSW(Node fsw)
 	{
 		this.fsw = fsw;
 	}
 
-	public final Node getFSE()
+	public Node getFSE()
 	{
 		return this.fse;
 	}
 
-	public final void setFSE(Node fse)
+	public void setFSE(Node fse)
 	{
 		this.fse = fse;
 	}
 	
-	public final Node getCNW()
+	public Node getCNW()
 	{
 		return this.cnw;
 	}
 
-	public final void setCNW(Node cnw)
+	public void setCNW(Node cnw)
 	{
 		this.cnw = cnw;
 	}
 
-	public final Node getCNE()
+	public Node getCNE()
 	{
 		return this.cne;
 	}
 
-	public final void setCNE(Node cne)
+	public void setCNE(Node cne)
 	{
 		this.cne = cne;
 	}
 
-	public final Node getCSW()
+	public Node getCSW()
 	{
 		return this.csw;
 	}
 
-	public final void setCSW(Node csw)
+	public void setCSW(Node csw)
 	{
 		this.csw = csw;
 	}
 
-	public final Node getCSE()
+	public Node getCSE()
 	{
 		return this.cse;
 	}
 
-	public final void setCSE(Node cse)
+	public void setCSE(Node cse)
 	{
 		this.cse = cse;
 	}
 	
 	// contained point methods
-	public final void addPoints(int i)
+	public void addPoints(int i)
 	{
 		this.contPoints.add(i);
 	}
 	
-	public final void removePoints()
+	public void removePoints()
 	{
 		// 2d
 		if (this.nw != null)
@@ -309,17 +309,17 @@ public final class Node implements Serializable
 		}
 	}
 
-	public final HashSet<Integer> getContPoints()
+	public HashSet<Integer> getContPoints()
 	{
 		return this.contPoints;
 	}
 
-	public final void setContPoints(HashSet<Integer> contPoints)
+	public void setContPoints(HashSet<Integer> contPoints)
 	{
 		this.contPoints = new HashSet<Integer>(contPoints);
 	}
 	
-	public final void removePoint(int i)
+	public void removePoint(int i)
 	{
 		this.contPoints.remove(i);
 	}

@@ -15,22 +15,22 @@ public final class IdDist implements Serializable
 		setDist(dist);
 	}
 	
-	public final void setId(int pid)
+	public void setId(int pid)
 	{
 		this.pid = pid;
 	}
 	
-	public final void setDist(double dist)
+	public void setDist(double dist)
 	{
 		this.dist = dist;
 	}
 	
-	public final int getId()
+	public int getId()
 	{
 		return this.pid;
 	}
 	
-	public final double getDist()
+	public double getDist()
 	{
 		return this.dist;
 	}
