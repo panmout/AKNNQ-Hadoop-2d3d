@@ -7,12 +7,12 @@ import java.util.PriorityQueue;
 
 public final class GetOverlaps
 {
-	private HashMap<String, Integer> cell_tpoints; // hashmap of training points per cell list from Phase 1 <cell_id, number of training points>
-	private String partitioning; // gd or qt
+	private final HashMap<String, Integer> cell_tpoints; // hashmap of training points per cell list from Phase 1 <cell_id, number of training points>
+	private final String partitioning; // gd or qt
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	private int K; // AKNN K
 	private Node root; // create root node
-	private HashSet<String> overlaps;
+	private final HashSet<String> overlaps;
 	private String qcell;
 	private Point qpoint;
 	private PriorityQueue<IdDist> neighbors;
@@ -193,7 +193,7 @@ public final class GetOverlaps
 		final double z = this.is3d ? zq % ds : Double.NEGATIVE_INFINITY; // relative z from cell floor SW corner (3d only)
 		
 		// add number of training points in this cell, 0 if null
-		final int num = this.cell_tpoints.containsKey(qcell) ? this.cell_tpoints.get(qcell) : 0;
+		final int num = this.cell_tpoints.getOrDefault(qcell, 0);
 		
 		// top-bottom rows, far left-right columns (rows and columns become walls in 3d)
 		final HashSet<Integer> south_row = new HashSet<Integer>(); // no S, SE, SW for cells in this set
@@ -443,10 +443,7 @@ public final class GetOverlaps
 			}
 			
 			// remove overlaps not containing training points
-			final Iterator<Integer> it = int_overlaps.iterator();
-			while (it.hasNext())
-				if (!this.cell_tpoints.containsKey(String.valueOf(it.next())))
-					it.remove();
+			int_overlaps.removeIf(cell -> !this.cell_tpoints.containsKey(String.valueOf(cell)));
 			
 			// subcase 1: no overlaps containing any tpoints, point goes straight to next phase
 			if (int_overlaps.isEmpty())
@@ -629,7 +626,7 @@ public final class GetOverlaps
 							stopRunY = true;
 						
 						// if all stop vars are set to 'true', stop loop
-						if (stopRunX == true && stopRunY == true)
+						if (stopRunX && stopRunY)
 							runAgain = false;
 					}
 					// 3d case
@@ -686,7 +683,7 @@ public final class GetOverlaps
 							stopRunZ = true;
 						
 						// if all stop vars are set to 'true', stop loop
-						if (stopRunX == true && stopRunY == true && stopRunZ == true)
+						if (stopRunX && stopRunY && stopRunZ)
 							runAgain = false;
 					}
 				} // end while (runagain)
@@ -1073,7 +1070,7 @@ public final class GetOverlaps
 		 */
     	
     	// total number of training points in this cell, 0 if null
-    	final int num = this.cell_tpoints.containsKey(qcell) ? this.cell_tpoints.get(qcell) : 0;
+    	final int num = this.cell_tpoints.getOrDefault(qcell, 0);
     	
     	final double ds = 1.0 / Math.pow(2, qcell.length()); // ds = query cell width
 		
@@ -1096,10 +1093,7 @@ public final class GetOverlaps
 			this.overlaps.remove(qcell);
 			
 			// remove overlaps not containing training points
-			final Iterator<String> it = this.overlaps.iterator();
-			while (it.hasNext())
-				if (!this.cell_tpoints.containsKey(it.next()))
-					it.remove();
+			this.overlaps.removeIf(s -> !this.cell_tpoints.containsKey(s));
 			
 			// subcase 1: no overlaps containing any tpoints, point goes straight to next phase
 			if (this.overlaps.isEmpty())
@@ -1127,16 +1121,16 @@ public final class GetOverlaps
 			 *   (we gave it an additional 20% boost)
 			 */
 			double r1 = 0;
-			double x = this.neighbors.size() / 2; // divide by 2 because knnlist also contains distances (size = 2*[number of neighbors])
+			int n = this.neighbors.size() / 2; // divide by 2 because knnlist also contains distances (size = 2*[number of neighbors])
 			// if x > 0 (there are some neighbors in the list) set first value
 			// else (no neighbors) set second value
 			
 			// 2d
 			if (!this.is3d)
-				r1 = (x > 0) ? Math.sqrt(this.K / x) * R : 1.2 * Math.sqrt(this.K) * R;
+				r1 = (n > 0) ? Math.sqrt((double) this.K / n) * R : 1.2 * Math.sqrt(this.K) * R;
 			// 3d
 			else
-				r1 = (x > 0) ? Math.cbrt(this.K / x) * R : 1.2 * Math.cbrt(this.K) * R;
+				r1 = (n > 0) ? Math.cbrt((double) this.K / n) * R : 1.2 * Math.cbrt(this.K) * R;
 			
 			int overlaps_points = 0; // total number of training points in overlaps
 			
@@ -1152,7 +1146,7 @@ public final class GetOverlaps
 					rangeQuery(xq, yq, r1, this.root, "");
 				// 3d
 				else
-					rangeQuery(xq, yq, zq, r1, root, "");
+					rangeQuery(xq, yq, zq, r1, this.root, "");
 				
 				// remove containing cell
 				this.overlaps.remove(qcell);

@@ -8,7 +8,6 @@ import java.util.FormatterClosedException;
 public class Aknn
 {
 	private static Formatter outputTextFile; // local output text file
-	
 	private static String partitioning; // grid or quadtree
 	private static String mode; // bf or ps
 	private static String K;
@@ -19,10 +18,8 @@ public class Aknn
 	private static String treeDir;
 	private static String queryDir;
 	private static String queryDataset;
-	private static String queryFile;
 	private static String trainingDir;
 	private static String trainingDataset;
-	private static String trainingFile;
 	private static String mr1outputPath;
 	private static String mr2outputPath;
 	private static String mr3outputPath;
@@ -71,8 +68,6 @@ public class Aknn
 					trainingDir = newarg[1];
 				if (newarg[0].equals("trainingDataset"))
 					trainingDataset = newarg[1];
-				if (newarg[0].equals("overlapsFile")) {
-				}
 				if (newarg[0].equals("mr1outputPath"))
 					mr1outputPath = newarg[1];
 				if (newarg[0].equals("mr2outputPath"))
@@ -85,9 +80,9 @@ public class Aknn
 			else
 				throw new IllegalArgumentException("not a valid argument, must be \"name=arg\", : " + arg);
 		}
-		
-		queryFile = String.format("%s/%s", queryDir, queryDataset);
-		trainingFile = String.format("%s/%s", trainingDir, trainingDataset);
+
+		String queryFile = String.format("%s/%s", queryDir, queryDataset);
+		String trainingFile = String.format("%s/%s", trainingDir, trainingDataset);
 		
 		if (!partitioning.equals("qt") && !partitioning.equals("gd"))
 			throw new IllegalArgumentException("partitoning arg must be 'qt' or 'gd'");
