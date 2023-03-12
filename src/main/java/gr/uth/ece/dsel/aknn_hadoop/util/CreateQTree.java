@@ -548,7 +548,7 @@ public final class CreateQTree
 		
 		averageWidth = averageWidth / this.widths.size();
 		
-		System.out.printf("average width: %11.10f\n", averageWidth);
+		System.out.printf("average width: %9.8f\n", averageWidth);
 		
 		Node root2 = null;
 		

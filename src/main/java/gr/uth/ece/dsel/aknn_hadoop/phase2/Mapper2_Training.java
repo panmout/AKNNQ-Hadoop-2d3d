@@ -33,12 +33,12 @@ public class Mapper2_Training extends Mapper<LongWritable, Text, Text, Text>
 		else if (this.partitioning.equals("gd")) // grid cell
 			cell = AknnFunctions.pointToCellGD(p, this.N);
 		
-		String outValue = "";
+		String outValue;
 		
 		if (p.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-			outValue = String.format("%d\t%11.10f\t%11.10f\tT", p.getId(), p.getX(), p.getY()); // add "T" at the end
+			outValue = String.format("%d\t%9.8f\t%9.8f\tT", p.getId(), p.getX(), p.getY()); // add "T" at the end
 		else
-			outValue = String.format("%d\t%11.10f\t%11.10f\t%11.10f\tT", p.getId(), p.getX(), p.getY(), p.getZ()); // add "T" at the end
+			outValue = String.format("%d\t%9.8f\t%9.8f\t%9.8f\tT", p.getId(), p.getX(), p.getY(), p.getZ());
 		
 		context.write(new Text(cell), new Text(outValue));
 	}

@@ -2,17 +2,17 @@
 #                             PARAMETERS                                  #
 ###########################################################################
 
-nameNode=panagiotis-lubuntu
+nameNode=Hadoopmaster
 trainingDir=input
 treeDir=sampletree
-trainingDataset=NApppointNNew.txt
-samplerate=10
-capacity=10
+trainingDataset=paskrsNNew_obj.txt
+samplerate=1
+capacity=200
 
 ###########################################################################
 #                                    EXECUTE                              # ###########################################################################
 
-hadoop jar ./target/aknn-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.util.QuadtreeArray \
+hadoop jar ./target/aknn-hadoop-2d3d-0.0.1-SNAPSHOT-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.util.QuadtreeArray \
 nameNode=$nameNode \
 trainingDir=$trainingDir \
 treeDir=$treeDir \

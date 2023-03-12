@@ -85,9 +85,9 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 				String outValue = "";
 				
 				if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-					outValue = String.format("%d\t%11.10f\t%11.10f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY());
+					outValue = String.format("%d\t%9.8f\t%9.8f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY());
 				else // 3d case
-					outValue = String.format("%d\t%11.10f\t%11.10f\t%11.10f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY(), qpoint.getZ());
+					outValue = String.format("%d\t%9.8f\t%9.8f\t%9.8f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY(), qpoint.getZ());
 				
 				context.write(new Text(cell), new Text(outValue));
 			}

@@ -36,9 +36,9 @@ public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 		String outValue = "";
 		
 		if (p.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-			outValue = String.format("%d\t%11.10f\t%11.10f", p.getId(), p.getX(), p.getY());
+			outValue = String.format("%d\t%9.8f\t%9.8f", p.getId(), p.getX(), p.getY());
 		else
-			outValue = String.format("%d\t%11.10f\t%11.10f\t%11.10f", p.getId(), p.getX(), p.getY(), p.getZ());
+			outValue = String.format("%d\t%9.8f\t%9.8f\t%9.8f", p.getId(), p.getX(), p.getY(), p.getZ());
 		
 		context.write(new Text(cell), new Text(outValue));
 	}

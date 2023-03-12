@@ -61,7 +61,7 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			}
 			else // the line is a training point from mapper3_2 output, add to tpoints list
 			{
-				Point tpoint = null;
+				Point tpoint;
 				
 				if (data.length == 3) // 2d case
 					tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
@@ -103,12 +103,12 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			int outKey = qpoint.getId();
 			
 			// outValue is {xq, yq, zq, cell, neighbor list, false}
-			String outValue = "";
+			String outValue;
 			
 			if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-				outValue = String.format("%11.10f\t%11.10f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+				outValue = String.format("%9.8f\t%9.8f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			else // 3d case
-				outValue = String.format("%11.10f\t%11.10f\t%11.10f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+				outValue = String.format("%9.8f\t%9.8f\t%9.8f\t%s\t%sfalse", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			
 			if (outValue != null)
 				context.write(new IntWritable(outKey), new Text(outValue));

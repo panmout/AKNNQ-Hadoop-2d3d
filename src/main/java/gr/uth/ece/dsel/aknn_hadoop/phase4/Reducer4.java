@@ -49,7 +49,7 @@ public class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 			while (neighbors.size() > 0) // reading neighbors list
 			{
 				IdDist neighbor = neighbors.poll(); // {tpoint_id, distance}
-				outValue.append(String.format("%d\t%11.10f\t", neighbor.getId(), neighbor.getDist()));
+				outValue.append(String.format("%d\t%9.8f\t", neighbor.getId(), neighbor.getDist()));
 			}
 			
 			context.write(key, new Text(outValue.toString()));
@@ -61,7 +61,7 @@ public class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 				IdDist neighbor = neighbors.poll(); // neighbor array
 				
 				outValue.append(String.format("%d\t", neighbor.getId()));
-				outValue.append(String.format("%11.10f\t", neighbor.getDist()));
+				outValue.append(String.format("%9.8f\t", neighbor.getDist()));
 			}
 			context.write(key, new Text(outValue.toString()));
 		}

@@ -33,7 +33,7 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			String line = value.toString(); // read a line
 			String[] data = line.trim().split("\t");
 			
-			Point p = null;
+			Point p;
 			
 			if (data.length == 4) // 2d case (id, x, y, Q/T)
 				p = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
@@ -82,12 +82,12 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			// outKey = qpoint id
 			int outKey = qpoint.getId();
 			// outValue is {xq, yq, zq, cell id, neighbor list}
-			String outValue = "";
+			String outValue;
 			
 			if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-				outValue = String.format("%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+				outValue = String.format("%9.8f\t%9.8f\t%s\t%s", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			else // 3d case
-				outValue = String.format("%11.10f\t%11.10f\t%11.10f\t%s\t%s", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
+				outValue = String.format("%9.8f\t%9.8f\t%9.8f\t%s\t%s", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
 			
 			context.write(new IntWritable(outKey), new Text(outValue));
 		}

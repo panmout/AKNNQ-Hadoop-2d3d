@@ -5,15 +5,15 @@
 partitioning=gd	    # gd or qt
 mode=ps             # bf or ps
 K=10
-reducers=2
-nameNode=panagiotis-lubuntu
-N=10
+reducers=32
+nameNode=Hadoopmaster
+N=500
 treeFile=qtree.ser
 treeDir=sampletree
 trainingDir=input
 queryDir=input
-queryDataset=query-dataset3d.txt
-trainingDataset=NApppointNNew3d.txt
+queryDataset=linearwaterNNew.txt
+trainingDataset=paskrsNNew_obj.txt
 mr1outputPath=mapreduce1
 mr2outputPath=mapreduce2
 mr3outputPath=mapreduce3
@@ -23,7 +23,7 @@ mr4outputPath=mapreduce4
 #                                    EXECUTE                              #
 ###########################################################################
 
-hadoop jar ./target/aknn-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.main.Aknn \
+hadoop jar ./target/aknnq-hadoop-0.0.1-SNAPSHOT.jar gr.uth.ece.dsel.aknn_hadoop.main.Aknn \
 partitioning=$partitioning \
 mode=$mode \
 K=$K \

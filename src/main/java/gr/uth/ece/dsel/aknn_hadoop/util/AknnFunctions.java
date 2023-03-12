@@ -266,7 +266,7 @@ public final class AknnFunctions
 			IdDist elem = newPQ.poll();
 			int pid = elem.getId();
 			double dist = elem.getDist();
-			output.append(String.format("%d\t%11.10f\t", pid, dist));
+			output.append(String.format("%d\t%9.8f\t", pid, dist));
 			counter++;
 		}
 		
