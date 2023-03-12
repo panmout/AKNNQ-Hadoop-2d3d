@@ -134,7 +134,7 @@ public class Aknn
 		System.out.println(phase4Message);
 		writeToFile(outputTextFile, phase4Message);
 		
-		String aknnMessage = String.format("%s-%s,  time: %d millis\n", partitioning.toUpperCase(), mode.toUpperCase(), t4 - t0);
+		String aknnMessage = String.format("%s-%s time: %d millis\n", partitioning.toUpperCase(), mode.toUpperCase(), t4 - t0);
 		System.out.println(aknnMessage);
 		writeToFile(outputTextFile, aknnMessage);
 		
