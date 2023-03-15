@@ -22,18 +22,16 @@ public class CreateQTreeArray
 	private static Formatter outputTextFile; // local output tree text file
 	private static FileOutputStream treeFileout;
 	private static ObjectOutputStream outputTreeFile; // local output tree object file
-	private static ArrayList<Point> sampleArrayList;
-	private static Point[] sampleArray;
+    private static Point[] sampleArray;
 	private static int capacity;
 	private static int numCells = 0;
-	private static StringBuilder x = new StringBuilder();
+	private static final StringBuilder x = new StringBuilder();
 	private static String treeFilePath;
 	private static String treeFileName;
 	private static String trainingDatasetPath;
 	private static int samplerate;
-	private static Node root;
-	
-	public CreateQTreeArray(int newCapacity, String newTreeFilePath, String newTreeFileName, String newArrayFilePath, String newArrayFileName, String newTrainingDatasetPath, int newSamplerate)
+
+    public CreateQTreeArray(int newCapacity, String newTreeFilePath, String newTreeFileName, String newArrayFilePath, String newArrayFileName, String newTrainingDatasetPath, int newSamplerate)
 	{
 		capacity = newCapacity;
 		treeFilePath = newTreeFilePath;
@@ -42,7 +40,7 @@ public class CreateQTreeArray
 		samplerate = newSamplerate;
 	}
 	
-	private static final void readSample()
+	private static void readSample()
 	{
 		try // open files
 		{
@@ -53,8 +51,8 @@ public class CreateQTreeArray
 			FileSystem fs = FileSystem.get(new Configuration());
 			Path trainingPath = new Path(trainingDatasetPath);
 			BufferedReader trainingBr = new BufferedReader(new InputStreamReader(fs.open(trainingPath))); // open HDFS training dataset file
-			
-			sampleArrayList = new ArrayList<Point>();
+
+            ArrayList<Point> sampleArrayList = new ArrayList<Point>();
 			
 			HashSet<Integer> randomNumbers = new HashSet<Integer>(samplerate); // [percentSample] size set for random integers
 			
@@ -88,7 +86,7 @@ public class CreateQTreeArray
 		}
 	}
 	
-	private static final void writeFiles(Node node)
+	private static void writeFiles(Node node)
 	{		
 		// write to files
 		try
@@ -126,7 +124,7 @@ public class CreateQTreeArray
 		}
 	}
 	
-	public static final void makeQuadArray(Point[] samplePoints, Node node)
+	public static void makeQuadArray(Point[] samplePoints, Node node)
 	{
 		double xmin = node.getXmin();
 		double xmax = node.getXmax();
@@ -183,7 +181,7 @@ public class CreateQTreeArray
 			makeQuadArray(samplePoints, node.getNE());
 	}
 	
-	public static final int xBinarySearchArray(Point[] array, int low, int high, double key)
+	public static int xBinarySearchArray(Point[] array, int low, int high, double key)
 	{
 		int l = low;
 		int r = high;
@@ -205,7 +203,7 @@ public class CreateQTreeArray
 		return mid;
 	}
 	
-	public static final int yBinarySearchArray(Point[] array, int low, int high, double key)
+	public static int yBinarySearchArray(Point[] array, int low, int high, double key)
 	{
 		int l = low;
 		int r = high;
@@ -228,7 +226,7 @@ public class CreateQTreeArray
 	}
 	
 	// create quadtree in string form
-	private static final void df_repr(Node node)
+	private static void df_repr(Node node)
 	{
 		if (node.getNW() == null)
 		{
@@ -246,13 +244,13 @@ public class CreateQTreeArray
 	}
 	
 	// create quadtree (capacity based only)
-	public static final void createQTree()
+	public static void createQTree()
 	{
 		readSample();
 		
 		// create quad tree from sample dataset
-		root = new Node(0.0, 0.0, 1.0, 1.0); // create root node
-		root.setLow(0);
+        Node root = new Node(0.0, 0.0, 1.0, 1.0); // create root node
+        root.setLow(0);
 		root.setHigh(sampleArray.length - 1);
 		
 		// create quadtree

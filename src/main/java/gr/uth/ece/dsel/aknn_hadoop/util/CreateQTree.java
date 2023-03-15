@@ -73,7 +73,7 @@ public final class CreateQTree
 	// create root node (all children split method)
 	private Node createQT(Node node, boolean force)
 	{
-		if (node.getContPoints().size() > this.capacity || (force == true))
+		if (node.getContPoints().size() > this.capacity || (force))
 		{
 			int nodeNumPoints = node.getContPoints().size();
 			

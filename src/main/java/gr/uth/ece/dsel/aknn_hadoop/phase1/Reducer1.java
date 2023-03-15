@@ -8,7 +8,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import gr.uth.ece.dsel.aknn_hadoop.util.Metrics;
 
-public class Reducer1 extends Reducer<Text, IntWritable, Text, IntWritable>
+public final class Reducer1 extends Reducer<Text, IntWritable, Text, IntWritable>
 {
 	@Override
 	public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException

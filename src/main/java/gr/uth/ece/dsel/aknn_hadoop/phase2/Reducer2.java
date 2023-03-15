@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
+public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 {
 	private int K; // user defined (k-nn)
 	private String mode; // bf or ps
@@ -23,7 +23,7 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException
 	{
-		String cell = key.toString(); // key is cell_id (mappers' output)
+		final String cell = key.toString(); // key is cell_id (mappers' output)
 		
 		this.qpoints.clear();
 		this.tpoints.clear();
@@ -41,8 +41,8 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 				p = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
 			else
 				throw new IllegalArgumentException();
-			
-			char type = line.trim().charAt(line.length() - 1); // get last "Q" or "T"
+
+			final char type = line.trim().charAt(line.length() - 1); // get last "Q" or "T"
 			
 			switch(type)
 			{
@@ -80,7 +80,7 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			
 			// write output
 			// outKey = qpoint id
-			int outKey = qpoint.getId();
+			final int outKey = qpoint.getId();
 			// outValue is {xq, yq, zq, cell id, neighbor list}
 			String outValue;
 			
@@ -99,7 +99,7 @@ public class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 	@Override
 	protected void setup(Context context) throws IOException
 	{
-		Configuration conf = context.getConfiguration();
+		final Configuration conf = context.getConfiguration();
 		
 		this.K = Integer.parseInt(conf.get("K"));
 		

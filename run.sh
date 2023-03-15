@@ -2,12 +2,12 @@
 #                             PARAMETERS                                  #
 ###########################################################################
 
-partitioning=gd	    # gd or qt
+partitioning=qt	    # gd or qt
 mode=ps             # bf or ps
 K=10
 reducers=32
 nameNode=Hadoopmaster
-N=500
+N=400
 treeFile=qtree.ser
 treeDir=sampletree
 trainingDir=input

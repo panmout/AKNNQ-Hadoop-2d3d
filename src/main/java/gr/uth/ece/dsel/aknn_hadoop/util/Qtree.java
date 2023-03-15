@@ -12,7 +12,7 @@ public final class Qtree
 	
 	public static void main(String[] args)
 	{
-		long t0 = System.currentTimeMillis();
+		final long t0 = System.currentTimeMillis();
 		
 		for (String arg: args)
 		{
@@ -69,8 +69,6 @@ public final class Qtree
 				break;
 		}
 		
-		long treetime = System.currentTimeMillis() - t0;
-		
-		System.out.printf("Quadtree {%s, capacity: %d, samplerate: %d} creation time: %d millis\n", qtreeType, capacity, samplerate, treetime);
+		System.out.printf("Quadtree {%s, capacity: %d, samplerate: %d} creation time: %d millis\n", qtreeType, capacity, samplerate, System.currentTimeMillis() - t0);
 	}
 }
