@@ -1,31 +1,29 @@
 package gr.uth.ece.dsel.aknn_hadoop.phase3;
 
-import java.io.IOException;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
-
 import gr.uth.ece.dsel.aknn_hadoop.util.AknnFunctions;
 import gr.uth.ece.dsel.aknn_hadoop.util.Node;
 import gr.uth.ece.dsel.aknn_hadoop.util.Point;
 import gr.uth.ece.dsel.aknn_hadoop.util.ReadHdfsFiles;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
 
-public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
+import java.io.IOException;
+
+public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 {
 	private String partitioning; // bf or qt
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	
 	@Override
-	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
+	public void map(Object key, Text value, Context context) throws IOException, InterruptedException
 	{
-		String line = value.toString(); // read a line
-		
-		Point p = AknnFunctions.stringToPoint(line, "\t");
-		
+		final String line = value.toString(); // read a line
+
+		final Point p = AknnFunctions.stringToPoint(line, "\t");
+
 		String cell = null;
 		
 		if (partitioning.equals("qt")) // quadtree cell
@@ -33,7 +31,7 @@ public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 		else if (partitioning.equals("gd")) // grid cell
 			cell = AknnFunctions.pointToCellGD(p, N);
 		
-		String outValue = "";
+		String outValue;
 		
 		if (p.getZ() == Double.NEGATIVE_INFINITY) // 2d case
 			outValue = String.format("%d\t%9.8f\t%9.8f", p.getId(), p.getX(), p.getY());
@@ -46,16 +44,16 @@ public class Mapper3_2 extends Mapper<LongWritable, Text, Text, Text>
 	@Override
 	protected void setup(Context context) throws IOException
 	{
-		Configuration conf = context.getConfiguration();
+		final Configuration conf = context.getConfiguration();
 		
 		partitioning = conf.get("partitioning");
 
 		// hostname
-		String hostname = conf.get("namenode"); // get namenode name
+		final String hostname = conf.get("namenode"); // get namenode name
 		// username
-		String username = System.getProperty("user.name"); // get user name
+		final String username = System.getProperty("user.name"); // get user name
 
-		FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
+		final FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
 		
 		if (partitioning.equals("qt"))
 		{

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Formatter;
 import java.util.FormatterClosedException;
 
-public class Aknn
+public final class Aknn
 {
 	private static Formatter outputTextFile; // local output text file
 	private static String partitioning; // grid or quadtree
@@ -81,25 +81,25 @@ public class Aknn
 				throw new IllegalArgumentException("not a valid argument, must be \"name=arg\", : " + arg);
 		}
 
-		String queryFile = String.format("%s/%s", queryDir, queryDataset);
-		String trainingFile = String.format("%s/%s", trainingDir, trainingDataset);
+		final String queryFile = String.format("%s/%s", queryDir, queryDataset);
+		final String trainingFile = String.format("%s/%s", trainingDir, trainingDataset);
 		
 		if (!partitioning.equals("qt") && !partitioning.equals("gd"))
 			throw new IllegalArgumentException("partitoning arg must be 'qt' or 'gd'");
 		
 		// execution starts
-		long t0 = System.currentTimeMillis();
-		
-		String startMessage = String.format("AKNN %s-%s starts\n", partitioning.toUpperCase(), mode.toUpperCase());
+		final long t0 = System.currentTimeMillis();
+
+		final String startMessage = String.format("AKNN %s-%s starts\n", partitioning.toUpperCase(), mode.toUpperCase());
 		System.out.println(startMessage);
 		writeToFile(outputTextFile, startMessage);
 		
 		// Phase 1
 		// parameters: <training dataset path> <output path> <namenode name> <treeDir> <treeFileName> <N> <partitioning> <reducers>
-		String[] driver1args = new String[] {trainingFile, mr1outputPath, nameNode, treeDir, treeFile, N, partitioning, reducers};
+		final String[] driver1args = new String[] {trainingFile, mr1outputPath, nameNode, treeDir, treeFile, N, partitioning, reducers};
 		new gr.uth.ece.dsel.aknn_hadoop.phase1.Driver1().run(driver1args);
-		
-		long t1 = System.currentTimeMillis();
+
+		final long t1 = System.currentTimeMillis();
 		String phase1Message = String.format("Phase 1 time: %d millis\n", t1 - t0);
 		System.out.println(phase1Message);
 		writeToFile(outputTextFile, phase1Message);
@@ -108,33 +108,33 @@ public class Aknn
 		// parameters: <query dataset path> <training dataset path> <output path> <namenode name> <treeDir> <treeFileName> <N> <K> <partitioning> <mode> <reducers>
 		String[] driver2args = new String[] {queryFile, trainingFile, mr2outputPath, nameNode, treeDir, treeFile, N, K, partitioning, mode, reducers};
 		new gr.uth.ece.dsel.aknn_hadoop.phase2.Driver2().run(driver2args);
-		
-		long t2 = System.currentTimeMillis();
-		String phase2Message = String.format("Phase 2 time: %d millis\n", t2 - t1);
+
+		final long t2 = System.currentTimeMillis();
+		final String phase2Message = String.format("Phase 2 time: %d millis\n", t2 - t1);
 		System.out.println(phase2Message);
 		writeToFile(outputTextFile, phase2Message);
 		
 		// Phase 3
 		// parameters: <mapreduce2 output path> <training dataset> <output path> <namenode name> <treeDir> <treeFileName> <N> <K> <MapReduce1 output dir> <partitioning> <mode> <reducers>
-		String[] driver3args = new String[] {mr2outputPath, trainingFile, mr3outputPath, nameNode, treeDir, treeFile, N, K, mr1outputPath, partitioning, mode, reducers};
+		final String[] driver3args = new String[] {mr2outputPath, trainingFile, mr3outputPath, nameNode, treeDir, treeFile, N, K, mr1outputPath, partitioning, mode, reducers};
 		new gr.uth.ece.dsel.aknn_hadoop.phase3.Driver3().run(driver3args);
-		
-		long t3 = System.currentTimeMillis();
-		String phase3Message = String.format("Phase 3 time: %d millis\n", t3 - t2);
+
+		final long t3 = System.currentTimeMillis();
+		final String phase3Message = String.format("Phase 3 time: %d millis\n", t3 - t2);
 		System.out.println(phase3Message);
 		writeToFile(outputTextFile, phase3Message);
 		
 		// Phase 4
 		// parameters: <mapreduce3 output> <mapreduce2 output> <output path> <K> <reducers>
-		String[] driver4args = new String[] {mr3outputPath, mr2outputPath, mr4outputPath, K, reducers};
+		final String[] driver4args = new String[] {mr3outputPath, mr2outputPath, mr4outputPath, K, reducers};
 		new gr.uth.ece.dsel.aknn_hadoop.phase4.Driver4().run(driver4args);
-		
-		long t4 = System.currentTimeMillis();
-		String phase4Message = String.format("Phase 4 time: %d millis\n", t4 - t3);
+
+		final long t4 = System.currentTimeMillis();
+		final String phase4Message = String.format("Phase 4 time: %d millis\n", t4 - t3);
 		System.out.println(phase4Message);
 		writeToFile(outputTextFile, phase4Message);
-		
-		String aknnMessage = String.format("%s-%s time: %d millis\n", partitioning.toUpperCase(), mode.toUpperCase(), t4 - t0);
+
+		final String aknnMessage = String.format("%s-%s time: %d millis\n", partitioning.toUpperCase(), mode.toUpperCase(), t4 - t0);
 		System.out.println(aknnMessage);
 		writeToFile(outputTextFile, aknnMessage);
 		

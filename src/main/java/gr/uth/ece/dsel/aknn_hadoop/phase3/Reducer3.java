@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
+public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 {
 	private int K; // user defined (k-nn)
 	private String mode; // bf or ps
@@ -23,15 +23,15 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException
 	{
-		String cell = key.toString(); // key is cell_id (mappers' output)
+		final String cell = key.toString(); // key is cell_id (mappers' output)
 		
 		this.qpoints.clear();
 		this.tpoints.clear();
 						
 		for (Text value: values) // run through mappers output
 		{
-			String line = value.toString(); // read a line
-			String[] data = line.trim().split("\t");
+			final String line = value.toString(); // read a line
+			final String[] data = line.trim().split("\t");
 			
 			// if last element is true/false then
 			// the line is a query point with coords and 'true-false' flag from mapper3_1
@@ -40,9 +40,9 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			// or [pid, xq, yq, zq] + "false" (size = 5) for 3d
 			if (data[data.length - 1].equals("true")) // if flag is 'true' just print point info
 			{
-				int outKey = Integer.parseInt(data[0]); // key is point_id
-				
-				String outValue = "true"; // outvalue is 'true'
+				final int outKey = Integer.parseInt(data[0]); // key is point_id
+
+				final String outValue = "true"; // outvalue is 'true'
 				
 				context.write(new IntWritable(outKey), new Text(outValue));
 			}
@@ -50,7 +50,7 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			{
 				// flag is 'false', import info to qpoints for processing
 				// filling with rest of data[] except last 'false'
-				Point qpoint = null;
+				Point qpoint;
 				
 				if (data.length == 4) // 2d case
 					qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
@@ -100,7 +100,7 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 		
 			// write output
 			// outKey = qpoint id
-			int outKey = qpoint.getId();
+			final int outKey = qpoint.getId();
 			
 			// outValue is {xq, yq, zq, cell, neighbor list, false}
 			String outValue;
@@ -118,7 +118,7 @@ public class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 	@Override
 	protected void setup(Context context) throws IOException
 	{
-		Configuration conf = context.getConfiguration();
+		final Configuration conf = context.getConfiguration();
 		
 		this.K = Integer.parseInt(conf.get("K"));
 		

@@ -1,30 +1,28 @@
 package gr.uth.ece.dsel.aknn_hadoop.phase2;
 
-import java.io.IOException;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
-
 import gr.uth.ece.dsel.aknn_hadoop.util.AknnFunctions;
 import gr.uth.ece.dsel.aknn_hadoop.util.Node;
 import gr.uth.ece.dsel.aknn_hadoop.util.Point;
 import gr.uth.ece.dsel.aknn_hadoop.util.ReadHdfsFiles;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
 
-public class Mapper2_Query extends Mapper<LongWritable, Text, Text, Text>
+import java.io.IOException;
+
+public final class Mapper2_Query extends Mapper<Object, Text, Text, Text>
 {
 	private String partitioning; // bf or qt
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	
 	@Override
-	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
+	public void map(Object key, Text value, Context context) throws IOException, InterruptedException
 	{
-		String line = value.toString(); // read a line
-		
-		Point p = AknnFunctions.stringToPoint(line, "\t");
+		final String line = value.toString(); // read a line
+
+		final Point p = AknnFunctions.stringToPoint(line, "\t");
 		
 		String cell = null;
 		
@@ -47,25 +45,25 @@ public class Mapper2_Query extends Mapper<LongWritable, Text, Text, Text>
 	@Override
 	protected void setup(Context context) throws IOException
 	{
-		Configuration conf = context.getConfiguration();
+		final Configuration conf = context.getConfiguration();
 		
 		this.partitioning = conf.get("partitioning");
 
 		// hostname
-		String hostname = conf.get("namenode"); // get namenode name
+		final String hostname = conf.get("namenode"); // get namenode name
 		// username
-		String username = System.getProperty("user.name"); // get user name
+		final String username = System.getProperty("user.name"); // get user name
 
-		FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
+		final FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
 		
 		if (this.partitioning.equals("qt"))
 		{
 			// HDFS dir containing tree file
-			String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
+			final String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
 			// tree file name in HDFS
-			String treeFileName = conf.get("treeFileName"); // get tree filename
+			final String treeFileName = conf.get("treeFileName"); // get tree filename
 			// full HDFS path to tree file
-			String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
+			final String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
 
 			this.root = ReadHdfsFiles.getTree(treeFile, fs);
 		}

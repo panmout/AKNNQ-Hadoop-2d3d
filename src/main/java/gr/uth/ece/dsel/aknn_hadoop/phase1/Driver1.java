@@ -42,7 +42,7 @@ public class Driver1 extends Configured implements Tool
 		 
 		// Create job
 		Job job = Job.getInstance(conf, "MapReduce1");
-		job.setJarByClass(this.getClass());
+		job.setJarByClass(Driver1.class);
  
 		// Setup MapReduce job
 		job.setMapperClass(Mapper1.class);

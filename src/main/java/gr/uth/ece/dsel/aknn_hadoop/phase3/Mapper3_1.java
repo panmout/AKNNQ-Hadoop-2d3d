@@ -1,33 +1,26 @@
 package gr.uth.ece.dsel.aknn_hadoop.phase3;
 
+import gr.uth.ece.dsel.aknn_hadoop.util.*;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Mapper;
-
-import gr.uth.ece.dsel.aknn_hadoop.util.GetOverlaps;
-import gr.uth.ece.dsel.aknn_hadoop.util.IdDist;
-import gr.uth.ece.dsel.aknn_hadoop.util.IdDistComparator;
-import gr.uth.ece.dsel.aknn_hadoop.util.Node;
-import gr.uth.ece.dsel.aknn_hadoop.util.Point;
-import gr.uth.ece.dsel.aknn_hadoop.util.ReadHdfsFiles;
-
-public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
+public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 {
 	private GetOverlaps ovl;
 	private PriorityQueue<IdDist> neighbors;
 	
 	@Override
-	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException
+	public void map(Object key, Text value, Context context) throws IOException, InterruptedException
 	{
-		String line = value.toString();
-		String[] data = line.trim().split("\t");
+		final String line = value.toString();
+		final String[] data = line.trim().split("\t");
 		
 		// read input data: point id, x, y, z, cell id, neighbor list
 		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 3, 5, 7,...
@@ -70,7 +63,7 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		// get overlapped cells
 		this.ovl.initializeFields(qpoint, qcell, this.neighbors);
 
-		HashSet<String> overlaps = new HashSet<>(this.ovl.getOverlaps());
+		final HashSet<String> overlaps = new HashSet<>(this.ovl.getOverlaps());
 		
 		// write output:
 		// no overlaps: {query cell, qpoint id, true}
@@ -82,7 +75,7 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		{
 			for (String cell: overlaps)
 			{
-				String outValue = "";
+				String outValue;
 				
 				if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
 					outValue = String.format("%d\t%9.8f\t%9.8f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY());
@@ -98,25 +91,25 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 	@Override
 	protected void setup(Context context) throws IOException
 	{
-		Configuration conf = context.getConfiguration(); // get configuration
+		final Configuration conf = context.getConfiguration(); // get configuration
 
 		// bf or qt
-		String partitioning = conf.get("partitioning");
-		int k = Integer.parseInt(conf.get("K")); // get K
+		final String partitioning = conf.get("partitioning");
+		final int k = Integer.parseInt(conf.get("K")); // get K
 		// hostname
-		String hostname = conf.get("namenode"); // get namenode name
+		final String hostname = conf.get("namenode"); // get namenode name
 		// username
-		String username = System.getProperty("user.name"); // get user name
+		final String username = System.getProperty("user.name"); // get user name
 		// mapreduce1 dir name
-		String mr_1_dir = conf.get("mr_1_dir"); // mapreduce1 output dir
+		final String mr_1_dir = conf.get("mr_1_dir"); // mapreduce1 output dir
 		// = "hdfs://HadoopStandalone:9000/user/panagiotis/mapreduce1/part-r-00000"
-		String mr_1_out_full = String.format("hdfs://%s:9000/user/%s/%s", hostname, username, mr_1_dir);
-		
-		FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
+		final String mr_1_out_full = String.format("hdfs://%s:9000/user/%s/%s", hostname, username, mr_1_dir);
+
+		final FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
 		
 		// read MR1 output into hashmap
 		// hashmap of training points per cell list from MR1 {[cell_id, number of training points]}
-		HashMap<String, Integer> cell_tpoints = new HashMap<>(ReadHdfsFiles.getMR1output(mr_1_out_full, fs));
+		final HashMap<String, Integer> cell_tpoints = new HashMap<>(ReadHdfsFiles.getMR1output(mr_1_out_full, fs));
 		
 		// initialize overlaps object
 		this.ovl = new GetOverlaps(cell_tpoints, k, partitioning);
@@ -127,14 +120,14 @@ public class Mapper3_1 extends Mapper<LongWritable, Text, Text, Text>
 		if (partitioning.equals("qt"))
 		{
 			// HDFS dir containing tree file
-			String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
+			final String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
 			// tree file name in HDFS
-			String treeFileName = conf.get("treeFileName"); // get tree filename
+			final String treeFileName = conf.get("treeFileName"); // get tree filename
 			// full HDFS path to tree file
-			String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
+			final String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
 
 			// create root node
-			Node root = ReadHdfsFiles.getTree(treeFile, fs);
+			final Node root = ReadHdfsFiles.getTree(treeFile, fs);
 			
 			this.ovl.setRoot(root);
 		}
