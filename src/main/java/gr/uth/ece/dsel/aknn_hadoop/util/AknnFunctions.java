@@ -125,7 +125,7 @@ public final class AknnFunctions
 		final double y = p.getY();  // p.y
 		final int i = (int) (x / ds); // i = (int) x/ds
 		final int j = (int) (y / ds); // j = (int) y/ds
-		int cellId = 0;
+		int cellId;
 		
 		if (p.getZ() == Double.NEGATIVE_INFINITY) // 2d point
 			cellId = j * n + i;
