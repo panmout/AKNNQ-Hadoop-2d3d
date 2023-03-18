@@ -111,7 +111,7 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			// outValue is {xq, yq, zq, cell, neighbor list, false}
 			String outValue;
 			
-			outValue = String.format("%s\t%s\t%s\tfalse", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(this.neighbors, this.K));
+			outValue = String.format("%s\t%s\t%sfalse", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(this.neighbors, this.K, "min"));
 
 			if (outValue != null)
 				context.write(new IntWritable(outKey), new Text(outValue));

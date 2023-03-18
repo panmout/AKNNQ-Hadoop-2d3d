@@ -90,7 +90,7 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			// outValue is {xq, yq, zq, cell id, neighbor list}
 			String outValue;
 
-			outValue = String.format("%s\t%s\t%s", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(this.neighbors, this.K));
+			outValue = String.format("%s\t%s\t%s", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(this.neighbors, this.K, "min"));
 
 			context.write(new IntWritable(outKey), new Text(outValue));
 		}

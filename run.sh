@@ -2,7 +2,7 @@
 #                             PARAMETERS                                  #
 ###########################################################################
 
-partitioning=gd	    # gd or qt
+partitioning=qt	    # gd or qt
 mode=ps             # bf or ps
 K=10
 reducers=32
