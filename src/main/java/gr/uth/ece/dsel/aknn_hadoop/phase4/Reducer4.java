@@ -8,9 +8,8 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import gr.uth.ece.dsel.aknn_hadoop.util.AknnFunctions;
-import gr.uth.ece.dsel.aknn_hadoop.util.IdDist;
-import gr.uth.ece.dsel.aknn_hadoop.util.IdDistComparator;
+import gr.uth.ece.dsel.UtilityFunctions;
+import gr.uth.ece.dsel.common_classes.*;
 
 public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>
 {
@@ -34,7 +33,7 @@ public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text
 					int tid = Integer.parseInt(data[i]); // first element of couple is point id
 					double dist = Double.parseDouble(data[i+1]); // second element of couple is distance
 					IdDist neighbor = new IdDist(tid, dist);
-					if (!AknnFunctions.isDuplicate(neighbors, neighbor))
+					if (!UtilityFunctions.isDuplicate(neighbors, neighbor))
 			    		neighbors.offer(neighbor); // insert to queue
 				}
 			
@@ -49,7 +48,7 @@ public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text
 			while (neighbors.size() > 0) // reading neighbors list
 			{
 				IdDist neighbor = neighbors.poll(); // {tpoint_id, distance}
-				outValue.append(String.format("%d\t%9.8f\t", neighbor.getId(), neighbor.getDist()));
+				outValue.append(String.format("%s\t", neighbor));
 			}
 			
 			context.write(key, new Text(outValue.toString()));
@@ -60,8 +59,7 @@ public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text
 			{
 				final IdDist neighbor = neighbors.poll(); // neighbor array
 				
-				outValue.append(String.format("%d\t", neighbor.getId()));
-				outValue.append(String.format("%9.8f\t", neighbor.getDist()));
+				outValue.append(String.format("%s\t", neighbor));
 			}
 			context.write(key, new Text(outValue.toString()));
 		}

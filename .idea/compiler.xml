@@ -9,5 +9,8 @@
         <module name="aknnq-hadoop" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="AKNNQ-Hadoop" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

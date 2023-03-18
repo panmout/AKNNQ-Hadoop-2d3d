@@ -1,9 +1,10 @@
 package gr.uth.ece.dsel.aknn_hadoop.phase2;
 
-import gr.uth.ece.dsel.aknn_hadoop.util.AknnFunctions;
-import gr.uth.ece.dsel.aknn_hadoop.util.Node;
-import gr.uth.ece.dsel.aknn_hadoop.util.Point;
-import gr.uth.ece.dsel.aknn_hadoop.util.ReadHdfsFiles;
+// utility-classes-java imports
+import gr.uth.ece.dsel.UtilityFunctions;
+import gr.uth.ece.dsel.common_classes.*;
+import gr.uth.ece.dsel.aknn_hadoop.ReadHdfsFiles;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.Text;
@@ -22,22 +23,18 @@ public final class Mapper2_Query extends Mapper<Object, Text, Text, Text>
 	{
 		final String line = value.toString(); // read a line
 
-		final Point p = AknnFunctions.stringToPoint(line, "\t");
+		final Point p = UtilityFunctions.stringToPoint(line, "\t");
 		
 		String cell = null;
 		
 		if (this.partitioning.equals("qt")) // quadtree cell
-			cell = AknnFunctions.pointToCellQT(p, this.root);
+			cell = UtilityFunctions.pointToCellQT(p, this.root);
 		else if (this.partitioning.equals("gd")) // grid cell
-			cell = AknnFunctions.pointToCellGD(p, this.N);
+			cell = UtilityFunctions.pointToCellGD(p, this.N);
 		
 		String outValue;
-		
-		if (p.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-			outValue = String.format("%d\t%9.8f\t%9.8f\tQ", p.getId(), p.getX(), p.getY()); // add "Q" at the end
-		else
-			outValue = String.format("%d\t%9.8f\t%9.8f\t%9.8f\tQ", p.getId(), p.getX(), p.getY(), p.getZ()); // add "Q" at the end
 
+		outValue = String.format("%s\tQ", p); // add "Q" at the end
 
 		context.write(new Text(cell), new Text(outValue));
 	}

@@ -1,6 +1,12 @@
 package gr.uth.ece.dsel.aknn_hadoop.phase2;
 
-import gr.uth.ece.dsel.aknn_hadoop.util.*;
+// utility-classes-java imports
+import gr.uth.ece.dsel.common_classes.*;
+import gr.uth.ece.dsel.aknn_hadoop.BF_Neighbors;
+import gr.uth.ece.dsel.aknn_hadoop.PS_Neighbors;
+import gr.uth.ece.dsel.aknn_hadoop.Metrics;
+import gr.uth.ece.dsel.UtilityFunctions;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -14,8 +20,8 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 {
 	private int K; // user defined (k-nn)
 	private String mode; // bf or ps
-	private BfNeighbors bfn;
-	private PsNeighbors psn;
+	private BF_Neighbors bfn;
+	private PS_Neighbors psn;
 	private PriorityQueue<IdDist> neighbors;
 	private ArrayList<Point> qpoints; // list of qpoints in this cell
 	private ArrayList<Point> tpoints; // list of tpoints in this cell
@@ -56,12 +62,12 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 		}
 		
 		if (this.mode.equals("bf"))
-			this.bfn = new BfNeighbors(this.tpoints, this.K, context);
+			this.bfn = new BF_Neighbors(this.tpoints, this.K, context);
 		else if (this.mode.equals("ps"))
 		{
 			this.qpoints.sort(new PointXYComparator("min", 'x')); // sort datasets by x ascending
 			this.tpoints.sort(new PointXYComparator("min", 'x'));
-			this.psn = new PsNeighbors(this.tpoints, this.K, context);
+			this.psn = new PS_Neighbors(this.tpoints, this.K, context);
 		}
 		else
 			throw new IllegalArgumentException("mode arg must be 'bf' or 'ps'");
@@ -83,12 +89,9 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			final int outKey = qpoint.getId();
 			// outValue is {xq, yq, zq, cell id, neighbor list}
 			String outValue;
-			
-			if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-				outValue = String.format("%9.8f\t%9.8f\t%s\t%s", qpoint.getX(), qpoint.getY(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
-			else // 3d case
-				outValue = String.format("%9.8f\t%9.8f\t%9.8f\t%s\t%s", qpoint.getX(), qpoint.getY(), qpoint.getZ(), cell, AknnFunctions.pqToString(this.neighbors, this.K));
-			
+
+			outValue = String.format("%s\t%s\t%s", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(this.neighbors, this.K));
+
 			context.write(new IntWritable(outKey), new Text(outValue));
 		}
 		

@@ -1,6 +1,10 @@
 package gr.uth.ece.dsel.aknn_hadoop.phase3;
 
-import gr.uth.ece.dsel.aknn_hadoop.util.*;
+// utility-classes-java imports
+import gr.uth.ece.dsel.common_classes.*;
+import gr.uth.ece.dsel.aknn_hadoop.GetOverlaps;
+import gr.uth.ece.dsel.aknn_hadoop.ReadHdfsFiles;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.io.Text;
@@ -77,11 +81,8 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 			{
 				String outValue;
 				
-				if (qpoint.getZ() == Double.NEGATIVE_INFINITY) // 2d case
-					outValue = String.format("%d\t%9.8f\t%9.8f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY());
-				else // 3d case
-					outValue = String.format("%d\t%9.8f\t%9.8f\t%9.8f\tfalse", qpoint.getId(), qpoint.getX(), qpoint.getY(), qpoint.getZ());
-				
+				outValue = String.format("%s\tfalse", qpoint);
+
 				context.write(new Text(cell), new Text(outValue));
 			}
 		}
