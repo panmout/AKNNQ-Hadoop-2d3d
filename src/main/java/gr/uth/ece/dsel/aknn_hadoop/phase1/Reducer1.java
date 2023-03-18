@@ -6,7 +6,8 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import gr.uth.ece.dsel.aknn_hadoop.util.Metrics;
+// utility-classes-java imports
+import gr.uth.ece.dsel.aknn_hadoop.Metrics;
 
 public final class Reducer1 extends Reducer<Text, IntWritable, Text, IntWritable>
 {
