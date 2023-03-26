@@ -41,6 +41,9 @@ public class Driver3 extends Configured implements Tool
 		conf.set("mr_1_dir", args[8]);
 		conf.set("partitioning", args[9]);
 		conf.set("mode", args[10]);
+		// compress map output
+		conf.setBoolean("mapreduce.map.output.compress", true);
+		conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
 		
 		// Create job
 		Job job = Job.getInstance(conf, "MapReduce3");

@@ -90,7 +90,7 @@ public final class Aknn
 		// execution starts
 		final long t0 = System.currentTimeMillis();
 
-		final String startMessage = String.format("AKNN %s-%s starts\n", partitioning.toUpperCase(), mode.toUpperCase());
+		final String startMessage = String.format("AKNN %s-%s starts, N = %s, treefile = %s\n", partitioning.toUpperCase(), mode.toUpperCase(), N, treeFile);
 		System.out.println(startMessage);
 		writeToFile(outputTextFile, startMessage);
 		

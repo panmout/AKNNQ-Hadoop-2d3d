@@ -32,14 +32,17 @@ public class Driver1 extends Configured implements Tool
 		
 		// Create configuration
 		Configuration conf = new Configuration();
-		
+
 		// Set custom args
 		conf.set("namenode", args[2]);
 		conf.set("treeDir", args[3]);
 		conf.set("treeFileName", args[4]);
 		conf.set("N", args[5]);
 		conf.set("partitioning", args[6]);
-		 
+		// compress map output
+		conf.setBoolean("mapreduce.map.output.compress", true);
+		conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+
 		// Create job
 		Job job = Job.getInstance(conf, "MapReduce1");
 		job.setJarByClass(Driver1.class);
