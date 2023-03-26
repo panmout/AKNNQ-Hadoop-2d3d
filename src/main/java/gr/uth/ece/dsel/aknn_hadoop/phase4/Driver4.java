@@ -34,6 +34,9 @@ public class Driver4 extends Configured implements Tool
 		
 		// Set custom args (K)
 		conf.set("K", args[3]);
+		// compress map output
+		conf.setBoolean("mapreduce.map.output.compress", true);
+		conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
 		 
 		// Create job
 		Job job = Job.getInstance(conf, "MapReduce4");

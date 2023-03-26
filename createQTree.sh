@@ -7,7 +7,7 @@ trainingDir=input
 treeDir=sampletree
 trainingDataset=paskrsNNew_obj.txt
 samplerate=1
-capacity=20
+capacity=50
 type=1 # 1 for simple capacity based quadtree, 2 for all children split method, 3 for average width method
 
 ###########################################################################
