@@ -2,8 +2,7 @@ package gr.uth.ece.dsel.aknn_hadoop.phase2;
 
 // utility-classes-java imports
 import gr.uth.ece.dsel.common_classes.*;
-import gr.uth.ece.dsel.aknn_hadoop.BF_Neighbors;
-import gr.uth.ece.dsel.aknn_hadoop.PS_Neighbors;
+import gr.uth.ece.dsel.aknn_hadoop.FindNeighbors;
 import gr.uth.ece.dsel.aknn_hadoop.Metrics;
 import gr.uth.ece.dsel.UtilityFunctions;
 
@@ -20,8 +19,7 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 {
 	private int K; // user defined (k-nn)
 	private String mode; // bf or ps
-	private BF_Neighbors bfn;
-	private PS_Neighbors psn;
+	private FindNeighbors fn;
 	private PriorityQueue<IdDist> neighbors;
 	private ArrayList<Point> qpoints; // list of qpoints in this cell
 	private ArrayList<Point> tpoints; // list of tpoints in this cell
@@ -60,17 +58,14 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 					break;
 			}
 		}
-		
-		if (this.mode.equals("bf"))
-			this.bfn = new BF_Neighbors(this.tpoints, this.K, context);
-		else if (this.mode.equals("ps"))
+
+		if (this.mode.equals("ps"))
 		{
 			this.qpoints.sort(new PointXYComparator("min", 'x')); // sort datasets by x ascending
 			this.tpoints.sort(new PointXYComparator("min", 'x'));
-			this.psn = new PS_Neighbors(this.tpoints, this.K, context);
 		}
-		else
-			throw new IllegalArgumentException("mode arg must be 'bf' or 'ps'");
+
+		this.fn = new FindNeighbors(this.tpoints, this.K, context);
 		
 		// find neighbors for each query point
 		for (Point qpoint: this.qpoints)
@@ -78,9 +73,9 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 			this.neighbors.clear();
 			
 			if (this.mode.equals("bf"))
-				this.neighbors.addAll(this.bfn.getNeighbors(qpoint));
+				this.neighbors.addAll(this.fn.getBfNeighbors(qpoint));
 			else if (this.mode.equals("ps"))
-				this.neighbors.addAll(this.psn.getNeighbors(qpoint));
+				this.neighbors.addAll(this.fn.getPsNeighbors(qpoint));
 			else
 				throw new IllegalArgumentException("mode arg must be 'bf' or 'ps'");
 			

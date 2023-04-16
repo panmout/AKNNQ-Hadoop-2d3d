@@ -93,7 +93,7 @@ public final class Aknn
 		final String startMessage = String.format("AKNN %s-%s starts, N = %s, treefile = %s\n", partitioning.toUpperCase(), mode.toUpperCase(), N, treeFile);
 		System.out.println(startMessage);
 		writeToFile(outputTextFile, startMessage);
-		
+
 		// Phase 1
 		// parameters: <training dataset path> <output path> <namenode name> <treeDir> <treeFileName> <N> <partitioning> <reducers>
 		final String[] driver1args = new String[] {trainingFile, mr1outputPath, nameNode, treeDir, treeFile, N, partitioning, reducers};
