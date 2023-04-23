@@ -1,19 +1,24 @@
-treeFile=qtree20.ser
-export treeFile
+N=500
+export N
 ./batch.sh
 echo
 
-treeFile=qtree30.ser
-export treeFile
+N=600
+export N
 ./batch.sh
 echo
 
-treeFile=qtree40.ser
-export treeFile
+N=700
+export N
 ./batch.sh
 echo
 
-treeFile=qtree50.ser
-export treeFile
+N=800
+export N
+./batch.sh
+echo
+
+N=900
+export N
 ./batch.sh
 echo

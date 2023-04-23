@@ -52,8 +52,6 @@ public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text
 				} // end else
 			}
 		}
-
-		System.out.println("qpoint: " + key + ", neighbors size: " + neighbors.size());
 		
 		context.write(key, new Text(UtilityFunctions.pqToString(neighbors, this.K, "min")));
 	}
