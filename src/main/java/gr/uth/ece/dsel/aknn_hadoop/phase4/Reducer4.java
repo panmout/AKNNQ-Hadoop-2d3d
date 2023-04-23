@@ -18,51 +18,44 @@ public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text
 	@Override
 	public void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException
 	{
-		final PriorityQueue<IdDist> neighbors = new PriorityQueue<>(this.K, new IdDistComparator("min")); // neighbors queue by distance ascending
-				
-		int trueCounter = 0; // +1 for "true"
+		final PriorityQueue<IdDist> neighbors = new PriorityQueue<>(this.K, new IdDistComparator("max")); // max heap of K neighbors;
 		
 		for (Text value: values) // run through values (knnlist) of mapper output = {id1, dist1, id2, dist2,...}
 		{
 			final String line = value.toString();
 			final String[] data = line.trim().split("\t");
 			
-			if (data.length > 1) // if knnlist not empty (not MR2 output only 'false' or MR3 only 'true')
-				for (int i = 0; i < data.length - 1; i += 2) // fill neighbors list
+			for (int i = 0; i < data.length - 1; i += 2) // fill neighbors list
+			{
+				final int tid = Integer.parseInt(data[i]); // first element of couple is point id
+				final double dist = Double.parseDouble(data[i+1]); // second element of couple is distance
+				final IdDist neighbor = new IdDist(tid, dist);
+
+				// if PriorityQueue not full, add new tpoint (IdDist)
+				if (neighbors.size() < K)
 				{
-					int tid = Integer.parseInt(data[i]); // first element of couple is point id
-					double dist = Double.parseDouble(data[i+1]); // second element of couple is distance
-					IdDist neighbor = new IdDist(tid, dist);
 					if (!UtilityFunctions.isDuplicate(neighbors, neighbor))
-			    		neighbors.offer(neighbor); // insert to queue
+						neighbors.offer(neighbor); // insert to queue
 				}
-			
-			if (data[data.length - 1].equals("true")) // if found "true"
-				trueCounter++; // increase counter
+				else // if queue is full, run some checks and replace elements
+				{
+					final double dm = neighbors.peek().getDist(); // get (not remove) distance of neighbor with maximum distance
+					
+					if (dist < dm) // compare distance
+					{  					
+						if (!UtilityFunctions.isDuplicate(neighbors, neighbor))
+						{
+							neighbors.poll(); // remove top element
+							neighbors.offer(neighbor); // insert to queue
+						}
+					} // end if
+				} // end else
+			}
 		}
 
-		final StringBuilder outValue = new StringBuilder();
+		System.out.println("qpoint: " + key + ", neighbors size: " + neighbors.size());
 		
-		if (trueCounter > 0) // found at least one "true", just print point info
-		{
-			while (neighbors.size() > 0) // reading neighbors list
-			{
-				IdDist neighbor = neighbors.poll(); // {tpoint_id, distance}
-				outValue.append(String.format("%s\t", neighbor));
-			}
-			
-			context.write(key, new Text(outValue.toString()));
-		}
-		else // no "true" found, read first K neighbors
-		{	
-			for (int i = 0; i < this.K; i++) // reading neighbors list
-			{
-				final IdDist neighbor = neighbors.poll(); // neighbor array
-				
-				outValue.append(String.format("%s\t", neighbor));
-			}
-			context.write(key, new Text(outValue.toString()));
-		}
+		context.write(key, new Text(UtilityFunctions.pqToString(neighbors, this.K, "min")));
 	}
 	
 	@Override

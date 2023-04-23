@@ -40,11 +40,15 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			// or [pid, xq, yq, zq] + "false" (size = 5) for 3d
 			if (data[data.length - 1].equals("true")) // if flag is 'true' just print point info
 			{
+				/*
+				do nothing
+
 				final int outKey = Integer.parseInt(data[0]); // key is point_id
 
 				final String outValue = "true"; // outvalue is 'true'
 				
 				context.write(new IntWritable(outKey), new Text(outValue));
+				*/
 			}
 			else if (data[data.length - 1].equals("false"))
 			{
@@ -99,8 +103,8 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			// outKey = qpoint id
 			final int outKey = qpoint.getId();
 			
-			// outValue is {xq, yq, zq, cell, neighbor list, false}
-			final String outValue = String.format("%s\t%s\t%sfalse", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(neighbors, this.K, "min"));
+			// outValue is {xq, yq, zq, cell, neighbor list}
+			final String outValue = String.format("%s\t%s\t%s", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(neighbors, this.K, "min"));
 
 			if (outValue != null)
 				context.write(new IntWritable(outKey), new Text(outValue));
