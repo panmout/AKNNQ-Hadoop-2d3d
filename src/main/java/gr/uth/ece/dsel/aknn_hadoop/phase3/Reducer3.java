@@ -19,19 +19,15 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 {
 	private int K; // user defined (k-nn)
 	private String mode; // bf or ps
-	private FindNeighbors fn;
-	private PriorityQueue<IdDist> neighbors;
-	private ArrayList<Point> qpoints; // list of qpoints in this cell
-	private ArrayList<Point> tpoints; // list of tpoints in this cell
 	
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException
 	{
 		final String cell = key.toString(); // key is cell_id (mappers' output)
 		
-		this.qpoints.clear();
-		this.tpoints.clear();
-						
+		final ArrayList<Point> qpoints = new ArrayList<>(); // list of qpoints in this cell
+		final ArrayList<Point> tpoints = new ArrayList<>(); // list of tpoints in this cell
+		
 		for (Text value: values) // run through mappers output
 		{
 			final String line = value.toString(); // read a line
@@ -61,7 +57,7 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 				else // 3d case
 					qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
 				
-				this.qpoints.add(qpoint);
+				qpoints.add(qpoint);
 			}
 			else // the line is a training point from mapper3_2 output, add to tpoints list
 			{
@@ -72,30 +68,30 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 				else // 3d case
 					tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
 				
-				this.tpoints.add(tpoint);
+				tpoints.add(tpoint);
 			}
 		}
 		
 		// set TOTAL_POINTS metrics variable
-		context.getCounter(Metrics.TOTAL_TPOINTS).increment(this.tpoints.size());
+		context.getCounter(Metrics.TOTAL_TPOINTS).increment(tpoints.size());
 		
 		if (this.mode.equals("ps"))
 		{
-			this.qpoints.sort(new PointXYComparator("min", 'x')); // sort datasets by x ascending
-			this.tpoints.sort(new PointXYComparator("min", 'x'));
+			qpoints.sort(new PointXYComparator("min", 'x')); // sort datasets by x ascending
+			tpoints.sort(new PointXYComparator("min", 'x'));
 		}
-
-		this.fn = new FindNeighbors(this.tpoints, this.K, context);
 		
+		PriorityQueue<IdDist> neighbors; // min heap of K neighbors
+
+		final FindNeighbors fn = new FindNeighbors(tpoints, this.K, context);
+
 		// find neighbors for each query point
-		for (Point qpoint: this.qpoints)
+		for (Point qpoint: qpoints)
 		{
-			this.neighbors.clear();
-			
 			if (this.mode.equals("bf"))
-				this.neighbors.addAll(this.fn.getBfNeighbors(qpoint));
+				neighbors = fn.getBfNeighbors(qpoint);
 			else if (this.mode.equals("ps"))
-				this.neighbors.addAll(this.fn.getPsNeighbors(qpoint));
+				neighbors = fn.getPsNeighbors(qpoint);
 			else
 				throw new IllegalArgumentException("mode arg must be 'bf' or 'ps'");
 		
@@ -104,9 +100,7 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			final int outKey = qpoint.getId();
 			
 			// outValue is {xq, yq, zq, cell, neighbor list, false}
-			String outValue;
-			
-			outValue = String.format("%s\t%s\t%sfalse", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(this.neighbors, this.K, "min"));
+			final String outValue = String.format("%s\t%s\t%sfalse", qpoint.stringCoords(), cell, UtilityFunctions.pqToString(neighbors, this.K, "min"));
 
 			if (outValue != null)
 				context.write(new IntWritable(outKey), new Text(outValue));
@@ -121,10 +115,5 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 		this.K = Integer.parseInt(conf.get("K"));
 		
 		this.mode = conf.get("mode");
-		
-		this.neighbors = new PriorityQueue<>(this.K, new IdDistComparator("min")); // min heap of K neighbors
-		
-		this.qpoints = new ArrayList<>();
-		this.tpoints = new ArrayList<>();
 	}
 }

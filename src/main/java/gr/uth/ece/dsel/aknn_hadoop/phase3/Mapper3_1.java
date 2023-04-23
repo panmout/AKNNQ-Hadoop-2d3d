@@ -18,7 +18,7 @@ import java.util.PriorityQueue;
 public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 {
 	private GetOverlaps ovl;
-	private PriorityQueue<IdDist> neighbors;
+	private int K;
 	
 	@Override
 	public void map(Object key, Text value, Context context) throws IOException, InterruptedException
@@ -30,8 +30,9 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 3, 5, 7,...
 		Point qpoint;
 		String qcell;
+		IdDist neighbor;
 		
-		this.neighbors.clear();
+		final PriorityQueue<IdDist> neighbors = new PriorityQueue<>(this.K, new IdDistComparator("max")); // max heap
 		
 		if (data.length % 2 == 0) // 2d case
 		{
@@ -43,8 +44,8 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 				for (int j = 4; j < data.length; j += 2)
 				{
 					// 1st pair element is point id, 2nd pair element is distance
-					IdDist neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-					this.neighbors.offer(neighbor);
+					neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
+					neighbors.offer(neighbor);
 				}
 			}
 		}
@@ -58,16 +59,16 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 				for (int j = 5; j < data.length; j += 2)
 				{
 					// 1st pair element is point id, 2nd pair element is distance
-					IdDist neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-					this.neighbors.offer(neighbor);
+					neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
+					neighbors.offer(neighbor);
 				}
 			}
 		}
 		
 		// get overlapped cells
-		this.ovl.initializeFields(qpoint, qcell, this.neighbors);
+		this.ovl.initializeFields(qpoint, qcell, neighbors);
 
-		final HashSet<String> overlaps = new HashSet<>(this.ovl.getOverlaps());
+		final HashSet<String> overlaps = this.ovl.getOverlaps();
 		
 		// write output:
 		// no overlaps: {query cell, qpoint id, true}
@@ -78,10 +79,8 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		else // there are overlaps
 		{
 			for (String cell: overlaps)
-			{
-				String outValue;
-				
-				outValue = String.format("%s\tfalse", qpoint);
+			{				
+				final String outValue = String.format("%s\tfalse", qpoint);
 
 				context.write(new Text(cell), new Text(outValue));
 			}
@@ -96,7 +95,7 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 
 		// bf or qt
 		final String partitioning = conf.get("partitioning");
-		final int k = Integer.parseInt(conf.get("K")); // get K
+		this.K = Integer.parseInt(conf.get("K")); // get K
 		// hostname
 		final String hostname = conf.get("namenode"); // get namenode name
 		// username
@@ -113,9 +112,7 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		final HashMap<String, Integer> cell_tpoints = new HashMap<>(ReadHdfsFiles.getMR1output(mr_1_out_full, fs));
 		
 		// initialize overlaps object
-		this.ovl = new GetOverlaps(cell_tpoints, k, partitioning);
-		
-		this.neighbors = new PriorityQueue<>(k, new IdDistComparator("max")); // max heap
+		this.ovl = new GetOverlaps(cell_tpoints, this.K, partitioning);
 		
 		// read qtree or N
 		if (partitioning.equals("qt"))

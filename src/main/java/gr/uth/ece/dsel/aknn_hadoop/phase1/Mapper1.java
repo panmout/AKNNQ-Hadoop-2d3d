@@ -29,9 +29,9 @@ public final class Mapper1 extends Mapper<Object, Text, Text, IntWritable>
 		String cell = null;
 
 		if (this.partitioning.equals("qt")) // quadtree cell
-			cell = UtilityFunctions.pointToCellQT(p, this.root);
+			cell = UtilityFunctions.pointToCell(p, this.root);
 		else if (this.partitioning.equals("gd")) // grid cell
-			cell = UtilityFunctions.pointToCellGD(p, this.N);
+			cell = UtilityFunctions.pointToCell(p, this.N);
 		
 		context.write(new Text(cell), new IntWritable(1));
 	}

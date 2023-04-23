@@ -28,13 +28,11 @@ public final class Mapper2_Query extends Mapper<Object, Text, Text, Text>
 		String cell = null;
 		
 		if (this.partitioning.equals("qt")) // quadtree cell
-			cell = UtilityFunctions.pointToCellQT(p, this.root);
+			cell = UtilityFunctions.pointToCell(p, this.root);
 		else if (this.partitioning.equals("gd")) // grid cell
-			cell = UtilityFunctions.pointToCellGD(p, this.N);
+			cell = UtilityFunctions.pointToCell(p, this.N);
 		
-		String outValue;
-
-		outValue = String.format("%s\tQ", p); // add "Q" at the end
+		final String outValue = String.format("%s\tQ", p); // add "Q" at the end
 
 		context.write(new Text(cell), new Text(outValue));
 	}

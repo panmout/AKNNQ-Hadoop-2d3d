@@ -27,14 +27,12 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 
 		String cell = null;
 		
-		if (partitioning.equals("qt")) // quadtree cell
-			cell = UtilityFunctions.pointToCellQT(p, root);
-		else if (partitioning.equals("gd")) // grid cell
-			cell = UtilityFunctions.pointToCellGD(p, N);
+		if (this.partitioning.equals("qt")) // quadtree cell
+			cell = UtilityFunctions.pointToCell(p, this.root);
+		else if (this.partitioning.equals("gd")) // grid cell
+			cell = UtilityFunctions.pointToCell(p, this.N);
 		
-		String outValue;
-		
-		outValue = String.format("%s", p);
+		final String outValue = String.format("%s", p);
 
 		context.write(new Text(cell), new Text(outValue));
 	}
@@ -44,7 +42,7 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 	{
 		final Configuration conf = context.getConfiguration();
 		
-		partitioning = conf.get("partitioning");
+		this.partitioning = conf.get("partitioning");
 
 		// hostname
 		final String hostname = conf.get("namenode"); // get namenode name
@@ -53,7 +51,7 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 
 		final FileSystem fs = FileSystem.get(conf); // get filesystem type from configuration
 		
-		if (partitioning.equals("qt"))
+		if (this.partitioning.equals("qt"))
 		{
 			// HDFS dir containing tree file
 			String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
@@ -62,9 +60,9 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 			// full HDFS path to tree file
 			String treeFile = String.format("hdfs://%s:9000/user/%s/%s/%s", hostname, username, treeDir, treeFileName); // full HDFS path to tree file
 
-			root = ReadHdfsFiles.getTree(treeFile, fs);
+			this.root = ReadHdfsFiles.getTree(treeFile, fs);
 		}
-		else if (partitioning.equals("gd"))
-			N = Integer.parseInt(conf.get("N")); // get N
+		else if (this.partitioning.equals("gd"))
+		this.N = Integer.parseInt(conf.get("N")); // get N
 	}
 }
