@@ -38,18 +38,8 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			// data array has these elements: pid, "true" (size = 2)
 			// or [pid, xq, yq] + "false" (size = 4) for 2d
 			// or [pid, xq, yq, zq] + "false" (size = 5) for 3d
-			if (data[data.length - 1].equals("true")) // if flag is 'true' just print point info
-			{
-				/*
-				do nothing
-
-				final int outKey = Integer.parseInt(data[0]); // key is point_id
-
-				final String outValue = "true"; // outvalue is 'true'
-				
-				context.write(new IntWritable(outKey), new Text(outValue));
-				*/
-			}
+			if (data[data.length - 1].equals("true")) // if flag is 'true' do nothing
+				continue;
 			else if (data[data.length - 1].equals("false"))
 			{
 				// flag is 'false', import info to qpoints for processing
