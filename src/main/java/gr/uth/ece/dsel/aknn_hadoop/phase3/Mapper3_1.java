@@ -26,42 +26,36 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		final String line = value.toString();
 		final String[] data = line.trim().split("\t");
 		
-		// read input data: point id, x, y, z, cell id, neighbor list
-		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 3, 5, 7,...
+		// read input data: point id, x, y, (z), cell id, neighbor list
+		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 5, 7, 9,...
 		Point qpoint;
 		String qcell;
 		IdDist neighbor;
 		
 		final PriorityQueue<IdDist> neighbors = new PriorityQueue<>(this.K, new IdDistComparator("max")); // max heap
+
+		int n = 0; // n = 4 for 2d or 5 for 3d
 		
 		if (data.length % 2 == 0) // 2d case
 		{
 			qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
 			qcell = data[3];
-			
-			if (data.length > 4) // creating neighbors from [tpoint_id, dist] from knn list
-			{
-				for (int j = 4; j < data.length; j += 2)
-				{
-					// 1st pair element is point id, 2nd pair element is distance
-					neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-					neighbors.offer(neighbor);
-				}
-			}
+			n = 4;
 		}
 		else // 3d case
 		{
 			qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
 			qcell = data[4];
-			
-			if (data.length > 5) // creating neighbors from [tpoint_id, dist] from knn list
+			n = 5;
+		}
+
+		if (data.length > n) // creating neighbors from [tpoint_id, dist] from knn list
+		{
+			for (int j = n; j < data.length; j += 2)
 			{
-				for (int j = 5; j < data.length; j += 2)
-				{
-					// 1st pair element is point id, 2nd pair element is distance
-					neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-					neighbors.offer(neighbor);
-				}
+				// 1st pair element is point id, 2nd pair element is distance
+				neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
+				neighbors.offer(neighbor);
 			}
 		}
 		
