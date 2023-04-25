@@ -8,7 +8,6 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import gr.uth.ece.dsel.UtilityFunctions;
 import gr.uth.ece.dsel.common_classes.*;
 
 public final class Reducer4 extends Reducer<IntWritable, Text, IntWritable, Text>

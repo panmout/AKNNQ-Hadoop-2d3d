@@ -3,7 +3,6 @@ package gr.uth.ece.dsel.aknn_hadoop.phase3;
 // utility-classes-java imports
 import gr.uth.ece.dsel.common_classes.*;
 import gr.uth.ece.dsel.aknn_hadoop.ReadHdfsFiles;
-import gr.uth.ece.dsel.UtilityFunctions;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -63,6 +62,6 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 			this.root = ReadHdfsFiles.getTree(treeFile, fs);
 		}
 		else if (this.partitioning.equals("gd"))
-		this.N = Integer.parseInt(conf.get("N")); // get N
+			this.N = Integer.parseInt(conf.get("N")); // get N
 	}
 }

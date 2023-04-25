@@ -4,7 +4,6 @@ package gr.uth.ece.dsel.aknn_hadoop.phase2;
 import gr.uth.ece.dsel.common_classes.*;
 import gr.uth.ece.dsel.aknn_hadoop.FindNeighbors;
 import gr.uth.ece.dsel.aknn_hadoop.Metrics;
-import gr.uth.ece.dsel.UtilityFunctions;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
