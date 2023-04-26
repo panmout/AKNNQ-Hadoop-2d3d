@@ -1,0 +1,304 @@
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 55824 millis
+Phase 2 time: 67453 millis
+Phase 3 time: 117930 millis
+Phase 4 time: 135053 millis
+GD-PS time: 376260 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 67105 millis
+Phase 2 time: 77758 millis
+Phase 3 time: 415779 millis
+Phase 4 time: 137949 millis
+GD-PS time: 698591 millis
+AKNN QT-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59253 millis
+Phase 2 time: 72277 millis
+Phase 3 time: 148039 millis
+Phase 4 time: 207704 millis
+QT-PS time: 487273 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 61319 millis
+Phase 2 time: 67837 millis
+Phase 3 time: 115944 millis
+Phase 4 time: 135737 millis
+GD-PS time: 380837 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59299 millis
+Phase 2 time: 70501 millis
+Phase 3 time: 113830 millis
+Phase 4 time: 141824 millis
+GD-PS time: 385454 millis
+AKNN QT-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 69778 millis
+Phase 2 time: 73263 millis
+Phase 3 time: 265464 millis
+Phase 4 time: 215470 millis
+QT-PS time: 623975 millis
+AKNN GD-PS starts, N = 100, treefile = qtree.ser
+Phase 1 time: 60045 millis
+Phase 2 time: 59279 millis
+Phase 3 time: 175224 millis
+Phase 4 time: 108934 millis
+GD-PS time: 403482 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 55670 millis
+Phase 2 time: 72831 millis
+Phase 3 time: 149875 millis
+Phase 4 time: 222864 millis
+GD-PS time: 501240 millis
+AKNN QT-PS starts, N = 100, treefile = qtree.ser
+Phase 1 time: 58884 millis
+Phase 2 time: 74671 millis
+Phase 3 time: 289062 millis
+Phase 4 time: 504743 millis
+QT-PS time: 927360 millis
+AKNN GD-PS starts, N = 100, treefile = qtree.ser
+Phase 1 time: 56537 millis
+Phase 2 time: 63886 millis
+Phase 3 time: 186911 millis
+Phase 4 time: 121933 millis
+GD-PS time: 429267 millis
+AKNN GD-PS starts, N = 100, treefile = qtree.ser
+Phase 1 time: 64279 millis
+Phase 2 time: 64810 millis
+Phase 3 time: 255766 millis
+Phase 4 time: 117936 millis
+GD-PS time: 502791 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 55179 millis
+Phase 2 time: 70491 millis
+Phase 3 time: 153055 millis
+Phase 4 time: 213010 millis
+GD-PS time: 491735 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 60586 millis
+Phase 2 time: 72465 millis
+Phase 3 time: 159310 millis
+Phase 4 time: 232381 millis
+GD-PS time: 524742 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 62132 millis
+Phase 2 time: 74320 millis
+Phase 3 time: 164886 millis
+Phase 4 time: 229737 millis
+GD-PS time: 531075 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57414 millis
+Phase 2 time: 68532 millis
+Phase 3 time: 157981 millis
+Phase 4 time: 229876 millis
+GD-PS time: 513803 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 62330 millis
+Phase 2 time: 67541 millis
+Phase 3 time: 162644 millis
+Phase 4 time: 221266 millis
+GD-PS time: 513781 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 61659 millis
+Phase 2 time: 72543 millis
+Phase 3 time: 161480 millis
+Phase 4 time: 223920 millis
+GD-PS time: 519602 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 58178 millis
+Phase 2 time: 75746 millis
+Phase 3 time: 425512 millis
+Phase 4 time: 16671 millis
+GD-PS time: 576107 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 55768 millis
+Phase 2 time: 70470 millis
+Phase 3 time: 359153 millis
+Phase 4 time: 22059 millis
+GD-PS time: 507450 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57140 millis
+Phase 2 time: 71409 millis
+Phase 3 time: 158773 millis
+Phase 4 time: 233610 millis
+GD-PS time: 520932 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 64934 millis
+Phase 2 time: 70323 millis
+Phase 3 time: 152712 millis
+Phase 4 time: 210859 millis
+GD-PS time: 498828 millis
+AKNN QT-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57355 millis
+Phase 2 time: 74651 millis
+Phase 3 time: 269628 millis
+Phase 4 time: 485401 millis
+QT-PS time: 887035 millis
+AKNN GD-BF starts, N = 100, treefile = qtree.ser
+Phase 1 time: 74787 millis
+Phase 2 time: 73088 millis
+Phase 3 time: 204406 millis
+Phase 4 time: 111410 millis
+GD-BF time: 463691 millis
+AKNN GD-BF starts, N = 100, treefile = qtree.ser
+Phase 1 time: 79103 millis
+Phase 2 time: 66410 millis
+Phase 3 time: 282083 millis
+Phase 4 time: 149362 millis
+GD-BF time: 576958 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59965 millis
+Phase 2 time: 63295 millis
+Phase 3 time: 67934 millis
+Phase 4 time: 75342 millis
+GD-BF time: 266536 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 71183 millis
+Phase 2 time: 65669 millis
+Phase 3 time: 71191 millis
+Phase 4 time: 77625 millis
+GD-BF time: 285668 millis
+AKNN QT-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 61707 millis
+Phase 2 time: 72528 millis
+Phase 3 time: 73465 millis
+Phase 4 time: 80356 millis
+QT-BF time: 288056 millis
+AKNN QT-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 70354 millis
+Phase 2 time: 66812 millis
+Phase 3 time: 69044 millis
+Phase 4 time: 75654 millis
+QT-BF time: 281864 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 60812 millis
+Phase 2 time: 65728 millis
+Phase 3 time: 71227 millis
+Phase 4 time: 78419 millis
+GD-BF time: 276186 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 58313 millis
+Phase 2 time: 72839 millis
+Phase 3 time: 69373 millis
+Phase 4 time: 76402 millis
+GD-BF time: 276927 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59713 millis
+Phase 2 time: 65535 millis
+Phase 3 time: 53376 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 67336 millis
+Phase 2 time: 66165 millis
+Phase 3 time: 77199 millis
+Phase 4 time: 82391 millis
+GD-BF time: 293091 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59978 millis
+Phase 2 time: 66467 millis
+Phase 3 time: 72545 millis
+Phase 4 time: 77243 millis
+GD-BF time: 276233 millis
+AKNN QT-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 60690 millis
+Phase 2 time: 71751 millis
+Phase 3 time: 68751 millis
+Phase 4 time: 77250 millis
+QT-BF time: 278442 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 63892 millis
+Phase 2 time: 64845 millis
+Phase 3 time: 92607 millis
+Phase 4 time: 96132 millis
+GD-BF time: 317476 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 58689 millis
+Phase 2 time: 66848 millis
+Phase 3 time: 71827 millis
+Phase 4 time: 79924 millis
+GD-BF time: 277288 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59679 millis
+Phase 2 time: 68006 millis
+Phase 3 time: 73397 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 59196 millis
+Phase 2 time: 67655 millis
+Phase 3 time: 72470 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 61076 millis
+Phase 2 time: 67556 millis
+Phase 3 time: 81091 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57427 millis
+Phase 2 time: 64570 millis
+Phase 3 time: 73119 millis
+AKNN QT-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 66328 millis
+Phase 2 time: 65802 millis
+Phase 3 time: 68411 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57397 millis
+Phase 2 time: 64524 millis
+Phase 3 time: 101562 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57327 millis
+Phase 2 time: 64693 millis
+Phase 3 time: 52710 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 60957 millis
+Phase 2 time: 67417 millis
+Phase 3 time: 55548 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57741 millis
+Phase 2 time: 64586 millis
+Phase 3 time: 53441 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 55427 millis
+Phase 2 time: 64444 millis
+Phase 3 time: 52420 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 60892 millis
+Phase 2 time: 69558 millis
+Phase 3 time: 56268 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 57812 millis
+Phase 2 time: 67687 millis
+Phase 3 time: 56368 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 58801 millis
+Phase 2 time: 61202 millis
+Phase 3 time: 77712 millis
+Phase 4 time: 79279 millis
+GD-BF time: 276994 millis
+AKNN GD-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 67948 millis
+Phase 2 time: 64198 millis
+Phase 3 time: 79597 millis
+Phase 4 time: 79516 millis
+GD-BF time: 291259 millis
+AKNN QT-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 58557 millis
+Phase 2 time: 68229 millis
+Phase 3 time: 80516 millis
+Phase 4 time: 78274 millis
+QT-BF time: 285576 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 70909 millis
+Phase 2 time: 63526 millis
+Phase 3 time: 80796 millis
+Phase 4 time: 80397 millis
+GD-PS time: 295628 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 75870 millis
+Phase 2 time: 67500 millis
+Phase 3 time: 81912 millis
+Phase 4 time: 88939 millis
+GD-PS time: 314221 millis
+AKNN GD-PS starts, N = 10, treefile = qtree.ser
+Phase 1 time: 58104 millis
+Phase 2 time: 72010 millis
+Phase 3 time: 78025 millis
+Phase 4 time: 80853 millis
+GD-PS time: 288992 millis
+AKNN QT-BF starts, N = 10, treefile = qtree.ser
+Phase 1 time: 60336 millis
+Phase 2 time: 75091 millis
+Phase 3 time: 190801 millis
+Phase 4 time: 193683 millis
+QT-BF time: 519911 millis

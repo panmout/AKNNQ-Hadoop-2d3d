@@ -2,18 +2,18 @@
 #                             PARAMETERS                                  #
 ###########################################################################
 
-partitioning=qt	    # gd or qt
-mode=ps             # bf or ps
+partitioning=qt	# gd or qt
+mode=bf         # bf or ps
 K=10
-reducers=32
-nameNode=Hadoopmaster
-N=800
+reducers=2
+nameNode=panagiotis-lubuntu
+N=10
 treeFile=qtree.ser
 treeDir=sampletree
 trainingDir=input
 queryDir=input
-queryDataset=linearwaterNNew.txt
-trainingDataset=paskrsNNew_obj.txt
+queryDataset=NAclpointNNew.txt
+trainingDataset=NApppointNNew.txt
 mr1outputPath=mapreduce1
 mr2outputPath=mapreduce2
 mr3outputPath=mapreduce3
