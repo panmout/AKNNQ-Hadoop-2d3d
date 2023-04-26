@@ -2,7 +2,6 @@ package gr.uth.ece.dsel.aknn_hadoop.phase3;
 
 // utility-classes-java imports
 import gr.uth.ece.dsel.common_classes.*;
-import gr.uth.ece.dsel.aknn_hadoop.GetOverlaps;
 import gr.uth.ece.dsel.aknn_hadoop.ReadHdfsFiles;
 
 import org.apache.hadoop.conf.Configuration;
@@ -17,8 +16,9 @@ import java.util.PriorityQueue;
 
 public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 {
-	private GetOverlaps ovl;
+	private String partitioning;
 	private int K;
+	private GetOverlapsFunctions ovl;
 	
 	@Override
 	public void map(Object key, Text value, Context context) throws IOException, InterruptedException
@@ -26,50 +26,47 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		final String line = value.toString();
 		final String[] data = line.trim().split("\t");
 		
-		// read input data: point id, x, y, z, cell id, neighbor list
-		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 3, 5, 7,...
+		// read input data: point id, x, y, (z), cell id, neighbor list
+		// if there is no z (2d case) then data.length = 4, 6, 8,... else (3d case) data.length = 5, 7, 9,...
 		Point qpoint;
 		String qcell;
 		IdDist neighbor;
 		
 		final PriorityQueue<IdDist> neighbors = new PriorityQueue<>(this.K, new IdDistComparator("max")); // max heap
+
+		int n = 0; // n = 4 for 2d or 5 for 3d
 		
 		if (data.length % 2 == 0) // 2d case
 		{
 			qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
 			qcell = data[3];
-			
-			if (data.length > 4) // creating neighbors from [tpoint_id, dist] from knn list
-			{
-				for (int j = 4; j < data.length; j += 2)
-				{
-					// 1st pair element is point id, 2nd pair element is distance
-					neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-					neighbors.offer(neighbor);
-				}
-			}
+			n = 4;
 		}
 		else // 3d case
 		{
 			qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
 			qcell = data[4];
-			
-			if (data.length > 5) // creating neighbors from [tpoint_id, dist] from knn list
+			n = 5;
+		}
+
+		if (data.length > n) // creating neighbors from [tpoint_id, dist] from knn list
+		{
+			for (int j = n; j < data.length; j += 2)
 			{
-				for (int j = 5; j < data.length; j += 2)
-				{
-					// 1st pair element is point id, 2nd pair element is distance
-					neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
-					neighbors.offer(neighbor);
-				}
+				// 1st pair element is point id, 2nd pair element is distance
+				neighbor = new IdDist(Integer.parseInt(data[j]), Double.parseDouble(data[j + 1]));
+				neighbors.offer(neighbor);
 			}
 		}
 		
 		// get overlapped cells
-		this.ovl.initializeFields(qpoint, qcell, neighbors);
+		HashSet<String> overlaps = new HashSet<>();
 
-		final HashSet<String> overlaps = this.ovl.getOverlaps();
-		
+		if (this.partitioning.equals("gd"))
+			overlaps = this.ovl.getOverlapsGD(qcell, qpoint, neighbors);
+		else if (this.partitioning.equals("qt"))
+			overlaps = this.ovl.getOverlapsQT(qcell, qpoint, neighbors);
+
 		// write output:
 		// no overlaps: {query cell, qpoint id, true}
 		// overlaps: for each overlapped cell: {cell, qpoint id, x, y, z, false}
@@ -94,7 +91,7 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		final Configuration conf = context.getConfiguration(); // get configuration
 
 		// bf or qt
-		final String partitioning = conf.get("partitioning");
+		this.partitioning = conf.get("partitioning");
 		this.K = Integer.parseInt(conf.get("K")); // get K
 		// hostname
 		final String hostname = conf.get("namenode"); // get namenode name
@@ -111,11 +108,11 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 		// hashmap of training points per cell list from MR1 {[cell_id, number of training points]}
 		final HashMap<String, Integer> cell_tpoints = new HashMap<>(ReadHdfsFiles.getMR1output(mr_1_out_full, fs));
 		
-		// initialize overlaps object
-		this.ovl = new GetOverlaps(cell_tpoints, this.K, partitioning);
+		// initialize GetOverlapsFunctions object
+		this.ovl = new GetOverlapsFunctions (this.K, cell_tpoints);
 		
 		// read qtree or N
-		if (partitioning.equals("qt"))
+		if (this.partitioning.equals("qt"))
 		{
 			// HDFS dir containing tree file
 			final String treeDir = conf.get("treeDir"); // HDFS directory containing tree file
@@ -129,10 +126,11 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 			
 			this.ovl.setRoot(root);
 		}
-		else if (partitioning.equals("gd"))
+		else if (this.partitioning.equals("gd"))
 		{
 			// (2d) N*N or (3d) N*N*N cells
 			int n = Integer.parseInt(conf.get("N")); // get N
+			
 			this.ovl.setN(n);
 		}
 	}

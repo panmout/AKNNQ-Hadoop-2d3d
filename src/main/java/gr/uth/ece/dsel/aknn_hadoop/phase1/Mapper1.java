@@ -2,7 +2,6 @@ package gr.uth.ece.dsel.aknn_hadoop.phase1;
 
 // utility-classes-java imports
 import gr.uth.ece.dsel.common_classes.*;
-import gr.uth.ece.dsel.UtilityFunctions;
 import gr.uth.ece.dsel.aknn_hadoop.ReadHdfsFiles;
 
 import org.apache.hadoop.conf.Configuration;
