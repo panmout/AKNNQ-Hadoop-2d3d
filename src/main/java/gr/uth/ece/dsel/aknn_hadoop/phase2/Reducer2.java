@@ -29,8 +29,8 @@ public final class Reducer2 extends Reducer<Text, Text, IntWritable, Text>
 						
 		for (Text value: values) // run through value of mappers output
 		{
-			String line = value.toString(); // read a line
-			String[] data = line.trim().split("\t");
+			final String line = value.toString(); // read a line
+			final String[] data = line.trim().split("\t");
 			
 			Point p;
 			

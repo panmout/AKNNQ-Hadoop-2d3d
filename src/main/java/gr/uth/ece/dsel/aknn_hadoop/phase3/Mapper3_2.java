@@ -31,7 +31,7 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 		else if (this.partitioning.equals("gd")) // grid cell
 			cell = UtilityFunctions.pointToCell(p, this.N);
 		
-		final String outValue = String.format("%s", p);
+		final String outValue = String.format("%s\tT", p);
 
 		context.write(new Text(cell), new Text(outValue));
 	}
