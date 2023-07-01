@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 {
-	private String partitioning; // bf or qt
+	private String partitioning; // gd or qt
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	
@@ -31,7 +31,7 @@ public final class Mapper3_2 extends Mapper<Object, Text, Text, Text>
 		else if (this.partitioning.equals("gd")) // grid cell
 			cell = UtilityFunctions.pointToCell(p, this.N);
 		
-		final String outValue = String.format("%s", p);
+		final String outValue = String.format("%s\tT", p);
 
 		context.write(new Text(cell), new Text(outValue));
 	}

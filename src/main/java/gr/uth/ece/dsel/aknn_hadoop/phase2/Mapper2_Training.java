@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public final class Mapper2_Training extends Mapper<Object, Text, Text, Text>
 {
-	private String partitioning; // bf or qt
+	private String partitioning; // gd or qt
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 	

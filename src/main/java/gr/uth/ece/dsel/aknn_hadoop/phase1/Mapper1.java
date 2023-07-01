@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public final class Mapper1 extends Mapper<Object, Text, Text, IntWritable>
 {
-	private String partitioning; // bf or qt
+	private String partitioning; // gd or qt
 	private Node root; // create root node
 	private int N; // (2d) N*N or (3d) N*N*N cells
 

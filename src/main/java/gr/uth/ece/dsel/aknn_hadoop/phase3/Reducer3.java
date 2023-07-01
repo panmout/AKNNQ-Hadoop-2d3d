@@ -32,36 +32,25 @@ public final class Reducer3 extends Reducer<Text, Text, IntWritable, Text>
 			final String line = value.toString(); // read a line
 			final String[] data = line.trim().split("\t");
 			
-			// if last element is true/false then
-			// the line is a query point with coords and 'true-false' flag from mapper3_1
-			// data array has these elements: pid, "true" (size = 2)
-			// or [pid, xq, yq] + "false" (size = 4) for 2d
-			// or [pid, xq, yq, zq] + "false" (size = 5) for 3d
-			if (data[data.length - 1].equals("true")) // if flag is 'true' do nothing
-				continue;
-			else if (data[data.length - 1].equals("false"))
+			Point p;
+			
+			if (data.length == 4) // 2d case (id, x, y, Q/T)
+				p = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
+			else if (data.length == 5) // 3d case (x, y, z, Q/T)
+				p = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
+			else
+				throw new IllegalArgumentException();
+
+			final char type = line.trim().charAt(line.length() - 1); // get last "Q" or "T"
+			
+			switch(type)
 			{
-				// flag is 'false', import info to qpoints for processing
-				// filling with rest of data[] except last 'false'
-				Point qpoint;
-				
-				if (data.length == 4) // 2d case
-					qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
-				else // 3d case
-					qpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
-				
-				qpoints.add(qpoint);
-			}
-			else // the line is a training point from mapper3_2 output, add to tpoints list
-			{
-				Point tpoint;
-				
-				if (data.length == 3) // 2d case
-					tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));
-				else // 3d case
-					tpoint = new Point(Integer.parseInt(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]), Double.parseDouble(data[3]));
-				
-				tpoints.add(tpoint);
+				case 'Q':
+					qpoints.add(p); // add point to query list
+					break;
+				case 'T':
+					tpoints.add(p); // add point to training list
+					break;
 			}
 		}
 		
