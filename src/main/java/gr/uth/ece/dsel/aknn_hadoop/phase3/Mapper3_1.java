@@ -68,16 +68,14 @@ public final class Mapper3_1 extends Mapper<Object, Text, Text, Text>
 			overlaps = this.ovl.getOverlapsQT(qcell, qpoint, neighbors);
 
 		// write output:
-		// no overlaps: {query cell, qpoint id, true}
-		// overlaps: for each overlapped cell: {cell, qpoint id, x, y, z, false}
+		// overlaps: for each overlapped cell: {cell, qpoint id, x, y, z, 'Q'}
 		
-		if (overlaps.size() == 1 && overlaps.contains(qcell))	// only cell in overlaps is query cell, so there are no overlaps
-			context.write(new Text(qcell), new Text(String.format("%d\ttrue", qpoint.getId())));
-		else // there are overlaps
+		// if there are overlaps
+		if (!overlaps.isEmpty())
 		{
 			for (String cell: overlaps)
 			{				
-				final String outValue = String.format("%s\tfalse", qpoint);
+				final String outValue = String.format("%s\tQ", qpoint);
 
 				context.write(new Text(cell), new Text(outValue));
 			}
